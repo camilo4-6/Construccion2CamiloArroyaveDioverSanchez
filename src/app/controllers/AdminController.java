@@ -15,12 +15,14 @@ import app.dto.UserDto;
  */
 public class AdminController implements ControllerInterface {
 
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas  \n 3. para realizar consulta";
     private PersonValidator personValidator;
     private UserValidator userValidator;
 
     public AdminController() {
         this.personValidator = new PersonValidator();
         this.userValidator = new UserValidator();
+        
     }
 
     @Override
