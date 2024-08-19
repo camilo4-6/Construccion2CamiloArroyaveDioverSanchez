@@ -12,9 +12,9 @@ public class ClubProject {
      */
     public static void main(String[] args) {
         // TODO code application logic here]
-        MYSQLConnection accio = new MYSQLConnection();
+        MYSQLConnection connection = new MYSQLConnection();
 	try {
-            accio.getConnection();
+            connection.getConnection();
             System.out.println("queso");
 	} catch (Exception e) {
         	System.out.println(e.getMessage());
