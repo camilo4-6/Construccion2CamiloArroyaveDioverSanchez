@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package clubproject;
-
+import app.config.MYSQLConnection;
 
 public class ClubProject {
 
@@ -12,7 +12,16 @@ public class ClubProject {
      */
     public static void main(String[] args) {
         // TODO code application logic here]
-        System.out.println("queso");
+        MYSQLConnection accio = new MYSQLConnection();
+	try {
+            accio.getConnection();
+            System.out.println("queso");
+	} catch (Exception e) {
+        	System.out.println(e.getMessage());
+	}
+        
     }
+        
+    
     
 }
