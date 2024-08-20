@@ -16,6 +16,10 @@ public class ClubProject {
 	try {
             connection.getConnection();
             System.out.println("queso");
+            System.out.println("queso");
+            System.out.println("queso");
+            System.out.println("queso");
+            System.out.println("queso");
 	} catch (Exception e) {
         	System.out.println(e.getMessage());
 	}
