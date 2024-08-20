@@ -12,6 +12,7 @@ public class ClubProject {
      */
     public static void main(String[] args) {
         // TODO code application logic here]
+<<<<<<< HEAD
         MYSQLConnection connection = new MYSQLConnection();
 	try {
             connection.getConnection();
@@ -24,6 +25,9 @@ public class ClubProject {
         	System.out.println(e.getMessage());
 	}
         
+=======
+        System.out.println("hola");
+>>>>>>> parent of fbd2aa8 ( mano auida)
     }
         
     
