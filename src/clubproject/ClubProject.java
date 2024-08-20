@@ -12,22 +12,18 @@ public class ClubProject {
      */
     public static void main(String[] args) {
         // TODO code application logic here]
-<<<<<<< HEAD
+
         MYSQLConnection connection = new MYSQLConnection();
 	try {
             connection.getConnection();
-            System.out.println("queso");
-            System.out.println("queso");
-            System.out.println("queso");
-            System.out.println("queso");
-            System.out.println("queso");
+            
 	} catch (Exception e) {
         	System.out.println(e.getMessage());
 	}
         
-=======
-        System.out.println("hola");
->>>>>>> parent of fbd2aa8 ( mano auida)
+
+     
+
     }
         
     
