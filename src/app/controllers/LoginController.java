@@ -5,6 +5,7 @@
 package app.controllers;
 
 import app.controller.validator.UserValidator;
+import app.dto.UserDto;
 import app.service.interfac.LoginService;
 import app.service.x.Service;
 import java.util.HashMap;
@@ -28,13 +29,64 @@ public class LoginController implements ControllerInterface{
 		ControllerInterface guestController = new GuestController();
                 this.roles= new HashMap<String,ControllerInterface>();
 		roles.put("admin", adminController);
-		roles.put("veterinarian", partnerController);
-		roles.put("seller", guestController);
+		roles.put("partner", partnerController);
+		roles.put("guest", guestController);
     }
 
     @Override
     public void session() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       boolean session = true;
+		while (session) {
+			session = menu();
+		}
+                
     }
-        
+        private boolean menu() {
+		try {
+			System.out.println(MENU);
+			String option = Utils.getReader().nextLine();
+			return options(option);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return true;
+		}
+	}
+	private boolean options(String option) throws Exception {
+		switch (option) {
+		case "1": {
+			this.login();
+			return true;
+		}
+		case "2": {
+			System.out.println("se detiene el programa");;
+			return false;
+		}
+		default: {
+			System.out.println("ingrese una opcion valida");
+			return true;
+		}
+		}
+	}
+	
+	private void login()throws Exception {
+		System.out.println("ingrese el usuario");
+		String userName= Utils.getReader().nextLine();
+		userValidator.validUserName(userName);
+		System.out.println("ingrese la contraseña");
+		String password= Utils.getReader().nextLine();
+		userValidator.validPassword(password);
+		UserDto userDto = new UserDto();
+		userDto.setPassword(password);
+		userDto.setUserName(userName);
+		this.service.login(userDto);
+		if(roles.get(userDto.getRol())==null) {
+			throw new Exception ("Rol invalido");
+		}
+		roles.get(userDto.getRol()).session();
+		
+	}
+	
+	
+
 }
+

@@ -6,8 +6,13 @@ package app.controllers;
 
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
+import app.dto.InvoiceDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
+import app.model.Invoice;
+import app.service.interfac.AdminService;
+import app.service.x.Service;
+import java.sql.Date;
 
 /**
  *
@@ -15,20 +20,65 @@ import app.dto.UserDto;
  */
 public class AdminController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas  \n 3. para realizar consulta";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas (Socios,Invitados)  \n 3. Generar lista de vips";
     private PersonValidator personValidator;
     private UserValidator userValidator;
+    private AdminService service;
 
     public AdminController() {
         this.personValidator = new PersonValidator();
         this.userValidator = new UserValidator();
+        this.service = new Service();
         
     }
 
     @Override
-    public void session() throws Exception {
+   public void session() throws Exception {
+		boolean session = true;
+		while (session) {
+			session = menu();
+		}
 
-    }
+	}
+    private boolean menu() {
+		try {
+			System.out.println("bienvenido " + Service.user.getUserName());
+			System.out.print(MENU);
+			String option = Utils.getReader().nextLine();
+			return options(option);
+
+		} catch (
+
+		Exception e) {
+			System.out.println(e.getMessage());
+			return true;
+		}
+	}
+
+	private boolean options(String option) throws Exception{
+		switch (option) {
+		case "1": {
+			this.createPartner();
+			return true;
+		}
+		case "2": {
+			this.invoiceHistory();
+			return true;
+		}
+		case "3": {
+			System.out.println("se ha cerrado sesion");
+			return false;
+		}
+		case "4": {
+			System.out.println("se ha cerrado sesion");
+			return false;
+		}
+		default: {
+			System.out.println("ingrese una opcion valida");
+			return true;
+		}
+		}
+	}
 
     public void createPartner() throws Exception {
         System.out.println("Ingrese el nombre del socio");
@@ -56,3 +106,4 @@ public class AdminController implements ControllerInterface {
         System.out.println("se ha creado el usuario exitosamente ");
     }
 }
+  
