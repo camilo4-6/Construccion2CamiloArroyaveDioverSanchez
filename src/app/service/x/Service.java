@@ -1,6 +1,12 @@
-
+ 
 package app.service.x;
 
+import app.Daoo.PersonDaoImplementation;
+import app.Daoo.UserDaoImplementation;
+import app.dao.interfaces.GuestDao;
+import app.dao.interfaces.InvoiceDao;
+import app.dao.interfaces.InvoiceDetailDao;
+import app.dao.interfaces.PartnerDao;
 import app.dao.interfaces.PersonDao;
 import app.dao.interfaces.UserDao;
 import app.dto.GuestDto;
@@ -13,7 +19,16 @@ import app.service.interfac.PartnerService;
 public class Service implements AdminService,LoginService,PartnerService{
         private UserDao userDao;
 	private PersonDao personDao;
+        private PartnerDao partnerDao;
+        private InvoiceDetailDao invoiceDetailDao;
+        private InvoiceDao invoiceDao;
+        private GuestDao guestDao;
         public static UserDto user;
+        
+        public Service() {
+        this.userDao = new UserDaoImplementation();
+        this.personDao = new PersonDaoImplementation();
+        }  
     @Override
     public void createPartner(UserDto userDto) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
