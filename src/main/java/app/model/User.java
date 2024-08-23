@@ -10,7 +10,7 @@ public class User {
     private Person personId;
     private String userName;
     private String password;
-    private String rol;
+    private String role;
 
     public Person getPersonId() {
         return personId;
@@ -47,11 +47,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getRol() {
-        return rol;
+    public String getRole() {
+        return role;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setRole(String role) {
+        this.role = role;
     }
+
 }

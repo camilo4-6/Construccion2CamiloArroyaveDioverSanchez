@@ -22,7 +22,7 @@ public class UserDaoImplementation implements UserDao {
     @Override
 
     public UserDto findByUserName(UserDto userDto) throws Exception {
-        String query = "SELECT ID,USERNAME,PASSWORD,ROL,PERSONID FROM USER WHERE USERNAME = ?";
+        String query = "SELECT ID,USERNAME,PASSWORD,ROLE ,PERSONNID FROM USER WHERE USERNAME = ?";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
         preparedStatement.setString(1, userDto.getUserName());
         ResultSet resulSet = preparedStatement.executeQuery();
@@ -31,9 +31,9 @@ public class UserDaoImplementation implements UserDao {
             user.setId(resulSet.getLong("ID"));
             user.setUserName(resulSet.getString("USERNAME"));
             user.setPassword(resulSet.getString("PASSWORD"));
-            user.setRol(resulSet.getString("ROL"));
+            user.setRole(resulSet.getString("ROLE"));
             Person person = new Person();
-            person.setDocument(resulSet.getLong("PERSONID"));
+            person.setDocument(resulSet.getLong("PERSONNID"));
             user.setPersonId(person);
             resulSet.close();
             preparedStatement.close();
@@ -64,7 +64,7 @@ public class UserDaoImplementation implements UserDao {
 		preparedStatement.setString(1, user.getUserName());
 		preparedStatement.setString(2, user.getPassword());
 		preparedStatement.setLong(3,user.getPersonId().getId());
-		preparedStatement.setString(4, user.getRol());
+		preparedStatement.setString(4, user.getRole());
 		preparedStatement.execute();
 		preparedStatement.close();
 		}

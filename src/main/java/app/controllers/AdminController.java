@@ -102,7 +102,7 @@ public class AdminController implements ControllerInterface {
         userDto.setPersonId(personDto);
         userDto.setUserName(userName);
         userDto.setPassword(password);
-        userDto.setRol("Partner");
+        userDto.setRole("Partner");
         System.out.println("se ha creado el usuario exitosamente ");
     }
 }

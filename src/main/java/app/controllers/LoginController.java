@@ -82,10 +82,10 @@ public class LoginController implements ControllerInterface {
         userDto.setPassword(password);
         userDto.setUserName(userName);
         this.service.login(userDto);
-        if (rol.get(userDto.getRol()) == null) {
+        if (rol.get(userDto.getRole()) == null) {
             throw new Exception("Rol invalido");
         }
-        rol.get(userDto.getRol()).session();
+        rol.get(userDto.getRole()).session();
 
     }
 
