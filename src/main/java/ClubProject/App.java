@@ -5,7 +5,8 @@
 package ClubProject;
 
 import app.config.MYSQLConnection;
-
+import app.controllers.ControllerInterface;
+import app.controllers.LoginController;
 /**
  *
  * @author Camilo
@@ -14,16 +15,14 @@ public class App {
     public static void main(String[] args) {
         // TODO code application logic here]
 
-        MYSQLConnection connection = new MYSQLConnection();
-        try {
-            connection.getConnection();
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println("sfd");
-        }
-
-    }
+		ControllerInterface controller = new LoginController();
+		try {
+			controller.session();
+			MYSQLConnection.getConnection();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
 
 }
 
