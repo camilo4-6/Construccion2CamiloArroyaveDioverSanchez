@@ -6,10 +6,7 @@ package app.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-/**
- *
- * @author diove
- */
+
 public class MYSQLConnection {
         private static final String URL = "jdbc:mysql://localhost:3306/club";
 	private static final String USER = "root";

@@ -1,5 +1,4 @@
 app\Daoo\PersonDaoImplementation.class
-clubproject\ClubProject.class
 app\Daoo\UserDaoImplementation.class
 app\dto\PersonDto.class
 app\controller\validator\InvoiceDetailValidator.class
@@ -26,6 +25,7 @@ app\controller\validator\InvoiceValidator.class
 app\controllers\AdminController.class
 app\controller\validator\UserValidator.class
 app\controller\validator\PartnerValidator.class
+ClubProject\App.class
 app\service\interfac\AdminService.class
 app\model\Guest.class
 app\model\User.class
