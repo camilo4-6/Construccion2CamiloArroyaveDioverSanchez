@@ -20,7 +20,7 @@ import java.sql.Date;
  */
 public class AdminController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas (Socios,Invitados)  \n 3. Generar lista de vips";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas (Socios,Invitados)  \n 3. Generar lista de vips\n 4. Para cerrar sesion" ;
     private PersonValidator personValidator;
     private UserValidator userValidator;
     private AdminService service;
@@ -85,9 +85,9 @@ public class AdminController implements ControllerInterface {
         String name = Utils.getReader().nextLine();
         personValidator.validName(name);
         System.out.println("ingrese la cedula");
-        long cedula = personValidator.validDocument(Utils.getReader().nextLine());
+        long document = personValidator.validDocument(Utils.getReader().nextLine());
         System.out.println("ingrese el numero de celular");
-        long celPhone = personValidator.validAge(Utils.getReader().nextLine());
+        long celPhone = personValidator.validPhone(Utils.getReader().nextLine());
         System.out.println("ingrese el usuario del socio");
         String userName = Utils.getReader().nextLine();
         userValidator.validUserName(userName);
@@ -96,13 +96,13 @@ public class AdminController implements ControllerInterface {
         userValidator.validUserName(password);
         PersonDto personDto = new PersonDto();
         personDto.setName(name);
-        //personDto.setCedula(cedula);
+        personDto.setDocument(document);
         personDto.setCelPhone(celPhone);
         UserDto userDto = new UserDto();
         userDto.setPersonId(personDto);
         userDto.setUserName(userName);
         userDto.setPassword(password);
-        userDto.setRole("Partner");
+        userDto.setRole("partner");
         System.out.println("se ha creado el usuario exitosamente ");
     }
 }

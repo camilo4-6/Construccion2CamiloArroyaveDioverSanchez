@@ -28,7 +28,7 @@ public class LoginController implements ControllerInterface {
         ControllerInterface adminController = new AdminController();
         ControllerInterface partnerController = new PartnerController();
         ControllerInterface guestController = new GuestController();
-        this.rol = new HashMap<String, ControllerInterface>();
+        this.rol = new HashMap<String,ControllerInterface>();
         rol.put("admin", adminController);
         rol.put("partner", partnerController);
         rol.put("guest", guestController);

@@ -81,7 +81,7 @@ public class PartnerController implements ControllerInterface {
         System.out.println("ingrese la cedula");
         long document = personValidator.validDocument(Utils.getReader().nextLine());
         System.out.println("ingrese el numero de celular");
-        long celPhone = personValidator.validAge(Utils.getReader().nextLine());
+        long celPhone = personValidator.validPhone(Utils.getReader().nextLine());
         System.out.println("ingrese el usuario del invitado");
         String userName = Utils.getReader().nextLine();
         userValidator.validUserName(userName);
@@ -96,7 +96,7 @@ public class PartnerController implements ControllerInterface {
         userDto.setPersonId(personDto);
         userDto.setUserName(userName);
         userDto.setPassword(password);
-        userDto.setRole("Guest");
+        userDto.setRole("guest");
         System.out.println("se ha creado el usuario exitosamente ");
     }
 

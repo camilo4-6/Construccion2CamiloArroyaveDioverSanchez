@@ -63,8 +63,8 @@ public class Service implements AdminService,LoginService,PartnerService{
     
 
     @Override
-    public void createGuest(GuestDto guestDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void createGuest(UserDto userDto) throws Exception {
+        this.createUser(userDto);
     }
     private void createUser(UserDto userDto) throws Exception {
         this.createPerson(userDto.getPersonId());
@@ -78,7 +78,7 @@ public class Service implements AdminService,LoginService,PartnerService{
             this.userDao.createUser(userDto);
         } catch (SQLException e) {
             this.personDao.deletePerson(userDto.getPersonId());
-        }
+        } 
     }
      private void createPerson(PersonDto personDto) throws Exception {
         if (this.personDao.existByDocument(personDto)) {
