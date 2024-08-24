@@ -4,7 +4,7 @@
  */
 package app.dto;
 
-import jdk.jfr.Timestamp;
+import java.sql.Timestamp;
 
 public class PartnerDto {
 

@@ -9,6 +9,7 @@ app\controller\validator\PersonValidator.class
 app\controllers\PartnerController.class
 app\dao\interfaces\GuestDao.class
 app\dao\interfaces\InvoiceDetailDao.class
+app\Daoo\PartnerDaoImplemetation.class
 app\model\Person.class
 app\dto\GuestDto.class
 app\controllers\LoginController.class

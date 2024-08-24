@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -59,7 +60,7 @@ public class UserDaoImplementation implements UserDao {
     @Override
   public void createUser(UserDto userDto) throws Exception {
 		User user = Helper.parse(userDto);
-		String query = "INSERT INTO USER(USERNAME,PASSWORD,PERSONID,ROLE) VALUES (?,?,?,?) ";
+		String query = "INSERT INTO USER(USERNAME,PASSWORD,PERSONNID,ROLE) VALUES (?,?,?,?) ";
 		PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
 		preparedStatement.setString(1, user.getUserName());
 		preparedStatement.setString(2, user.getPassword());

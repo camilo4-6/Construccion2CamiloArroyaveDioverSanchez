@@ -5,10 +5,12 @@
 package app.controllers;
 
 import app.controller.validator.GuestValidator;
+import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
 import app.dto.PersonDto;
 import app.dto.UserDto;
+import app.model.Partner;
 import app.service.x.Service;
 
 /**
@@ -17,13 +19,13 @@ import app.service.x.Service;
  */
 public class PartnerController implements ControllerInterface {
 
-    private GuestValidator guestValidator;
+    private PartnerValidator partnerValidator;
     private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agregar fondos. \n 3.para ver historial de facturas . \n 4. para cerrar sesion.";
     private PersonValidator personValidator;
     private UserValidator userValidator;
 
     public PartnerController() {
-        this.guestValidator = new GuestValidator();
+        this.partnerValidator = new PartnerValidator();
         this.personValidator = new PersonValidator();
         this.userValidator = new UserValidator();
     }
@@ -87,7 +89,7 @@ public class PartnerController implements ControllerInterface {
         userValidator.validUserName(userName);
         System.out.println("ingrese la contraseña del invitado ");
         String password = Utils.getReader().nextLine();
-        userValidator.validUserName(password);
+        userValidator.validPassword(password);
         PersonDto personDto = new PersonDto();
         personDto.setName(name);
         personDto.setDocument(document);
@@ -100,9 +102,9 @@ public class PartnerController implements ControllerInterface {
         System.out.println("se ha creado el usuario exitosamente ");
     }
 
-    private void ADDFOUNDS() {
+    private void ADDFOUNDS() throws Exception{
         System.out.println("Cuanto quiere ingresar?");
-        
-        
+        String money = Utils.getReader().nextLine();
+        partnerValidator.validMoney(money);
            }
 }

@@ -4,15 +4,18 @@
  */
 package app.controllers;
 
+import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
 import app.dto.InvoiceDto;
+import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Invoice;
 import app.service.interfac.AdminService;
 import app.service.x.Service;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -20,15 +23,17 @@ import java.sql.Date;
  */
 public class AdminController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas (Socios,Invitados)  \n 3. Generar lista de vips\n 4. Para cerrar sesion" ;
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas (Socios,Invitados)  \n 3. Generar lista de vips\n 4. Para cerrar sesion\n";
     private PersonValidator personValidator;
     private UserValidator userValidator;
     private AdminService service;
+    private PartnerValidator partnerValidator;
 
     public AdminController() {
         this.personValidator = new PersonValidator();
         this.userValidator = new UserValidator();
         this.service = new Service();
+        this.partnerValidator = new PartnerValidator();
         
     }
 
@@ -94,6 +99,8 @@ public class AdminController implements ControllerInterface {
         System.out.println("ingrese la contraseña ");
         String password = Utils.getReader().nextLine();
         userValidator.validUserName(password);
+        System.out.println("Ingrese la cantidad de dinero de socio (50.000 min - 1.000.000 max)");
+        double money = partnerValidator.validMoney(Utils.getReader().nextLine());
         PersonDto personDto = new PersonDto();
         personDto.setName(name);
         personDto.setDocument(document);
@@ -103,7 +110,20 @@ public class AdminController implements ControllerInterface {
         userDto.setUserName(userName);
         userDto.setPassword(password);
         userDto.setRole("partner");
-        System.out.println("se ha creado el usuario exitosamente ");
+        PartnerDto partnerDto= new PartnerDto();
+        partnerDto.setUser(userDto);
+        partnerDto.setMoney(money);
+        partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
+        if (money < 1000000) {
+        partnerDto.setType("regular");
+    }   else {
+        partnerDto.setType("Vip");
     }
+        this.service.createPartner(partnerDto);
+        System.out.println("se ha creado el usuario exitosamente ");
+        System.out.println("Tipo de socio: "+partnerDto.getType());
+        System.out.println("Y se creo en el momento "+partnerDto.getDateCreated());
+    }
+
 }
   

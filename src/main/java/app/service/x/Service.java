@@ -1,6 +1,7 @@
  
 package app.service.x;
 
+import app.Daoo.PartnerDaoImplemetation;
 import app.Daoo.PersonDaoImplementation;
 import app.Daoo.UserDaoImplementation;
 import app.dao.interfaces.GuestDao;
@@ -10,6 +11,7 @@ import app.dao.interfaces.PartnerDao;
 import app.dao.interfaces.PersonDao;
 import app.dao.interfaces.UserDao;
 import app.dto.GuestDto;
+import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.service.interfac.AdminService;
@@ -30,15 +32,27 @@ public class Service implements AdminService,LoginService,PartnerService{
         public Service() {
         this.userDao = new UserDaoImplementation();
         this.personDao = new PersonDaoImplementation();
+        this.partnerDao = new PartnerDaoImplemetation();
         }  
     @Override
-    public void createPartner(UserDto userDto) throws Exception {
-        this.createUser(userDto);
+    public void createPartner(PartnerDto partnerDto) throws Exception {
+      
+        createPerson(partnerDto.getUser().getPersonId());
+        createUser(partnerDto.getUser());
+        if (partnerDao.existsByUser(partnerDto.getUser())) {
+            throw new Exception("Ya existe un partner asociado con este usuario.");
+        }
+        try {
+            partnerDao.createPartner(partnerDto);
+        } catch (SQLException e) {
+            throw new Exception("Error al crear el partner.", e);
+        }
     }
+    
 
     @Override
-    public void createVoice(UserDto userDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void createGuest(UserDto userDto) throws Exception {
+        this.createUser(userDto);
     }
 
     @Override
@@ -62,10 +76,8 @@ public class Service implements AdminService,LoginService,PartnerService{
     }
     
 
-    @Override
-    public void createGuest(UserDto userDto) throws Exception {
-        this.createUser(userDto);
-    }
+    
+    
     private void createUser(UserDto userDto) throws Exception {
         this.createPerson(userDto.getPersonId());
         PersonDto personDto = personDao.findByDocument(userDto.getPersonId());

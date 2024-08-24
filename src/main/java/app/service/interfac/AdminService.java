@@ -1,10 +1,11 @@
 
 package app.service.interfac;
 
-import app.dto.UserDto;
+import app.dto.PartnerDto;
+
 
 
 public interface AdminService {
-    public void createPartner(UserDto userDto) throws Exception;
-    public void createVoice (UserDto userDto) throws Exception;
+    public void createPartner(PartnerDto partnerDto) throws Exception;
+    
 }
