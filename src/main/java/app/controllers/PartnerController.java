@@ -20,7 +20,7 @@ import app.service.x.Service;
 public class PartnerController implements ControllerInterface {
 
     private PartnerValidator partnerValidator;
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agregar fondos. \n 3.para ver historial de facturas . \n 4. para cerrar sesion.";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agregar fondos. \n 3.para gastar en x cosa . \n 4. para ver historial de facturas";
     private PersonValidator personValidator;
     private UserValidator userValidator;
 
@@ -58,7 +58,7 @@ public class PartnerController implements ControllerInterface {
                 return true;
             }
             case "2": {
-                this.ADDFOUNDS();
+                this.addFounds();
                 return true;
             }
             case "3": {
@@ -102,7 +102,7 @@ public class PartnerController implements ControllerInterface {
         System.out.println("se ha creado el usuario exitosamente ");
     }
 
-    private void ADDFOUNDS() throws Exception{
+    private void addFounds() throws Exception{
         System.out.println("Cuanto quiere ingresar?");
         String money = Utils.getReader().nextLine();
         partnerValidator.validMoney(money);

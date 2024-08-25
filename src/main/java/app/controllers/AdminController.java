@@ -34,56 +34,55 @@ public class AdminController implements ControllerInterface {
         this.userValidator = new UserValidator();
         this.service = new Service();
         this.partnerValidator = new PartnerValidator();
-        
+
     }
 
     @Override
-   public void session() throws Exception {
-		boolean session = true;
-		while (session) {
-			session = menu();
-		}
+    public void session() throws Exception {
+        boolean session = true;
+        while (session) {
+            session = menu();
+        }
 
-	}
+    }
+
     private boolean menu() {
-		try {
-			System.out.println("bienvenido " + Service.user.getUserName());
-			System.out.print(MENU);
-			String option = Utils.getReader().nextLine();
-			return options(option);
+        try {
+            System.out.println("bienvenido " + Service.user.getUserName());
+            System.out.print(MENU);
+            String option = Utils.getReader().nextLine();
+            return options(option);
 
-		} catch (
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return true;
+        }
+    }
 
-		Exception e) {
-			System.out.println(e.getMessage());
-			return true;
-		}
-	}
-
-	private boolean options(String option) throws Exception{
-		switch (option) {
-		case "1": {
-			this.createPartner();
-			return true;
-		}
-		case "2": {
-			//this.invoiceHistory();
-			return true;
-		}
-		case "3": {
-			System.out.println("se ha cerrado sesion");
-			return false;
-		}
-		case "4": {
-			System.out.println("se ha cerrado sesion");
-			return false;
-		}
-		default: {
-			System.out.println("ingrese una opcion valida");
-			return true;
-		}
-		}
-	}
+    private boolean options(String option) throws Exception {
+        switch (option) {
+            case "1": {
+                this.createPartner();
+                return true;
+            }
+            case "2": {
+                //this.invoiceHistory();
+                return true;
+            }
+            case "3": {
+                System.out.println("se ha cerrado sesion");
+                return false;
+            }
+            case "4": {
+                System.out.println("se ha cerrado sesion");
+                return false;
+            }
+            default: {
+                System.out.println("ingrese una opcion valida");
+                return true;
+            }
+        }
+    }
 
     public void createPartner() throws Exception {
         System.out.println("Ingrese el nombre del socio");
@@ -110,20 +109,19 @@ public class AdminController implements ControllerInterface {
         userDto.setUserName(userName);
         userDto.setPassword(password);
         userDto.setRole("partner");
-        PartnerDto partnerDto= new PartnerDto();
+        PartnerDto partnerDto = new PartnerDto();
         partnerDto.setUser(userDto);
         partnerDto.setMoney(money);
         partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
         if (money < 1000000) {
-        partnerDto.setType("regular");
-    }   else {
-        partnerDto.setType("Vip");
-    }
+            partnerDto.setType("regular");
+        } else {
+            partnerDto.setType("Vip");
+        }
         this.service.createPartner(partnerDto);
         System.out.println("se ha creado el usuario exitosamente ");
-        System.out.println("Tipo de socio: "+partnerDto.getType());
-        System.out.println("Y se creo en el momento "+partnerDto.getDateCreated());
+        System.out.println("Tipo de socio: " + partnerDto.getType());
+        System.out.println("Y se creo en el momento " + partnerDto.getDateCreated());
     }
 
 }
-  

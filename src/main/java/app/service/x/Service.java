@@ -11,12 +11,14 @@ import app.dao.interfaces.PartnerDao;
 import app.dao.interfaces.PersonDao;
 import app.dao.interfaces.UserDao;
 import app.dto.GuestDto;
+import app.dto.InvoiceDto;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.service.interfac.AdminService;
 import app.service.interfac.LoginService;
 import app.service.interfac.PartnerService;
+import java.sql.Date;
 import java.sql.SQLException;
 
 
@@ -98,4 +100,15 @@ public class Service implements AdminService,LoginService,PartnerService{
         }
         this.personDao.createPerson(personDto);
     }
-}
+    /*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {
+        InvoiceDto orderDto = new InvoiceDto();
+        orderDto.setCreationDate(new Date(clinicalHistoryDto.getDate()));
+        orderDto.setId(getId());
+        orderDto.setOwnerId(clinicalHistoryDto.getPetId().getOwnerId());
+        orderDto.setMedicine(clinicalHistoryDto.getMedicine());
+        orderDto.setDose(clinicalHistoryDto.getDose());
+        orderDto.setVeterinarian(clinicalHistoryDto.getVeterinarian());
+        orderDao.createOrder(orderDto);
+        return orderDto;*/
+    }
+

@@ -34,7 +34,7 @@ public class UserDaoImplementation implements UserDao {
             user.setPassword(resulSet.getString("PASSWORD"));
             user.setRole(resulSet.getString("ROLE"));
             Person person = new Person();
-            person.setDocument(resulSet.getLong("PERSONNID"));
+            person.setId(resulSet.getLong("PERSONNID"));
             user.setPersonId(person);
             resulSet.close();
             preparedStatement.close();
@@ -46,28 +46,28 @@ public class UserDaoImplementation implements UserDao {
     }
 
     @Override
-   public boolean existsByUserName(UserDto userDto) throws Exception {
-		String query = "SELECT 1 FROM USER WHERE USERNAME = ?";
-		PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-		preparedStatement.setString(1, userDto.getUserName());
-		ResultSet resulSet = preparedStatement.executeQuery();
-		boolean exists = resulSet.next();
-		resulSet.close();
-		preparedStatement.close();
-		return exists;
-		}
+    public boolean existsByUserName(UserDto userDto) throws Exception {
+        String query = "SELECT 1 FROM USER WHERE USERNAME = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setString(1, userDto.getUserName());
+        ResultSet resulSet = preparedStatement.executeQuery();
+        boolean exists = resulSet.next();
+        resulSet.close();
+        preparedStatement.close();
+        return exists;
+    }
 
     @Override
-  public void createUser(UserDto userDto) throws Exception {
-		User user = Helper.parse(userDto);
-		String query = "INSERT INTO USER(USERNAME,PASSWORD,PERSONNID,ROLE) VALUES (?,?,?,?) ";
-		PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-		preparedStatement.setString(1, user.getUserName());
-		preparedStatement.setString(2, user.getPassword());
-		preparedStatement.setLong(3,user.getPersonId().getId());
-		preparedStatement.setString(4, user.getRole());
-		preparedStatement.execute();
-		preparedStatement.close();
-		}
+    public void createUser(UserDto userDto) throws Exception {
+        User user = Helper.parse(userDto);
+        String query = "INSERT INTO USER(PERSONNID,USERNAME,PASSWORD,ROLE) VALUES (?,?,?,?) ";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setLong(1, user.getPersonId().getId());
+        preparedStatement.setString(2, user.getUserName());
+        preparedStatement.setString(3, user.getPassword());
+        preparedStatement.setString(4, user.getRole());
+        preparedStatement.execute();
+        preparedStatement.close();
+    }
 
 }
