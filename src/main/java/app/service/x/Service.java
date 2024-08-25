@@ -78,10 +78,14 @@ public class Service implements AdminService, LoginService, PartnerService {
     }
 
     private void createPerson(PersonDto personDto) throws Exception {
-
-        this.personDao.createPerson(personDto);
+      
+     if  (this.personDao.existByDocument(personDto)) {
+         throw new Exception("Ya existe una persona con este documento");
+     } 
+        
+         this.personDao.createPerson(personDto);
     }
-
+ 
     @Override
     public void createPartner(PartnerDto partnerDto) throws Exception {
         this.createUser(partnerDto.getUserId());
