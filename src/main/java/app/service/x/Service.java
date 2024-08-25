@@ -1,4 +1,3 @@
- 
 package app.service.x;
 
 import app.Daoo.PartnerDaoImplemetation;
@@ -21,36 +20,21 @@ import app.service.interfac.PartnerService;
 import java.sql.Date;
 import java.sql.SQLException;
 
+public class Service implements AdminService, LoginService, PartnerService {
 
-public class Service implements AdminService,LoginService,PartnerService{
-        private UserDao userDao;
-	private PersonDao personDao;
-        private PartnerDao partnerDao;
-        private InvoiceDetailDao invoiceDetailDao;
-        private InvoiceDao invoiceDao;
-        private GuestDao guestDao;
-        public static UserDto user;
-        
-        public Service() {
+    private UserDao userDao;
+    private PersonDao personDao;
+    private PartnerDao partnerDao;
+    private InvoiceDetailDao invoiceDetailDao;
+    private InvoiceDao invoiceDao;
+    private GuestDao guestDao;
+    public static UserDto user;
+
+    public Service() {
         this.userDao = new UserDaoImplementation();
         this.personDao = new PersonDaoImplementation();
         this.partnerDao = new PartnerDaoImplemetation();
-        }  
-    @Override
-    public void createPartner(PartnerDto partnerDto) throws Exception {
-      
-        createPerson(partnerDto.getUser().getPersonId());
-        createUser(partnerDto.getUser());
-        if (partnerDao.existsByUser(partnerDto.getUser())) {
-            throw new Exception("Ya existe un partner asociado con este usuario.");
-        }
-        try {
-            partnerDao.createPartner(partnerDto);
-        } catch (SQLException e) {
-            throw new Exception("Error al crear el partner.", e);
-        }
     }
-    
 
     @Override
     public void createGuest(UserDto userDto) throws Exception {
@@ -60,26 +44,23 @@ public class Service implements AdminService,LoginService,PartnerService{
     @Override
     public void login(UserDto userDto) throws Exception {
         UserDto validateDto = userDao.findByUserName(userDto);
-		if (validateDto == null) {
-			throw new Exception("no existe usuario registrado");
-		}
-		if (!userDto.getPassword().equals(validateDto.getPassword())) {
-			throw new Exception("usuario o contraseña incorrecto");
-		}
-		userDto.setRole(validateDto.getRole());
-		user = validateDto;
-      
+        if (validateDto == null) {
+            throw new Exception("no existe usuario registrado");
+        }
+        if (!userDto.getPassword().equals(validateDto.getPassword())) {
+            throw new Exception("usuario o contraseña incorrecto");
+        }
+        userDto.setRole(validateDto.getRole());
+        user = validateDto;
+
     }
 
     @Override
     public void logout() {
-       user = null;
+        user = null;
         System.out.println("se ha cerrado sesion");
     }
-    
 
-    
-    
     private void createUser(UserDto userDto) throws Exception {
         this.createPerson(userDto.getPersonId());
         PersonDto personDto = personDao.findByDocument(userDto.getPersonId());
@@ -92,14 +73,26 @@ public class Service implements AdminService,LoginService,PartnerService{
             this.userDao.createUser(userDto);
         } catch (SQLException e) {
             this.personDao.deletePerson(userDto.getPersonId());
-        } 
-    }
-     private void createPerson(PersonDto personDto) throws Exception {
-        if (this.personDao.existByDocument(personDto)) {
-            throw new Exception("ya existe una persona con ese documento");
+            throw new Exception("error al crear el usuario");
         }
+    }
+
+    private void createPerson(PersonDto personDto) throws Exception {
+
         this.personDao.createPerson(personDto);
     }
+
+    @Override
+    public void createPartner(PartnerDto partnerDto) throws Exception {
+        this.createUser(partnerDto.getUserId());
+       UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
+        partnerDto.setUserId(userDto);
+       try {
+            this.partnerDao.createPartner(partnerDto);
+       } catch (SQLException e) {
+            this.personDao.deletePerson(userDto.getPersonId());
+            throw new Exception("error al crear el usuario");
+
     /*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {
         InvoiceDto orderDto = new InvoiceDto();
         orderDto.setCreationDate(new Date(clinicalHistoryDto.getDate()));
@@ -110,5 +103,6 @@ public class Service implements AdminService,LoginService,PartnerService{
         orderDto.setVeterinarian(clinicalHistoryDto.getVeterinarian());
         orderDao.createOrder(orderDto);
         return orderDto;*/
+}
     }
-
+}

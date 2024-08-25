@@ -110,7 +110,7 @@ public class AdminController implements ControllerInterface {
         userDto.setPassword(password);
         userDto.setRole("partner");
         PartnerDto partnerDto = new PartnerDto();
-        partnerDto.setUser(userDto);
+        partnerDto.setUserId(userDto);
         partnerDto.setMoney(money);
         partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
         if (money < 1000000) {
@@ -118,10 +118,11 @@ public class AdminController implements ControllerInterface {
         } else {
             partnerDto.setType("Vip");
         }
-        this.service.createPartner(partnerDto);
+        
         System.out.println("se ha creado el usuario exitosamente ");
         System.out.println("Tipo de socio: " + partnerDto.getType());
         System.out.println("Y se creo en el momento " + partnerDto.getDateCreated());
+        this.service.createPartner(partnerDto);
     }
 
 }

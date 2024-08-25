@@ -64,7 +64,7 @@ public class PersonDaoImplementation implements PersonDao {
             person.setId(resulSet.getLong("ID"));
             person.setDocument(resulSet.getLong("DOCUMENT"));
             person.setName(resulSet.getString("NAME"));
-            person.setCelPhone(resulSet.getInt("CELLPHONE"));
+            person.setCelPhone(resulSet.getLong("CELLPHONE"));
             resulSet.close();
             preparedStatement.close();
             return Helper.parse(person);

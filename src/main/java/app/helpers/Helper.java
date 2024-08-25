@@ -8,7 +8,8 @@ import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Person;
 import app.model.User;
-
+import app.dto.PartnerDto;
+import app.model.Partner;
 /**
  *
  * @author Camilo
@@ -50,5 +51,25 @@ public abstract class Helper {
 		user.setRole(userDto.getRole());
 		user.setUserName(userDto.getUserName());
 		return user;
+	}
+
+	public static Partner parse(PartnerDto partnerDto) {
+		Partner  partner = new Partner();
+		partner .setId(partnerDto.getId());
+		partner .setUserId(parse(partnerDto.getUserId()));
+		partner .setMoney(partnerDto.getMoney());
+		partner .setType(partnerDto.getType());
+		partner .setDateCreated(partnerDto.getDateCreated());
+		return partner;
+	}
+	
+	public static PartnerDto parse(Partner partner) {
+		PartnerDto partnerDto = new PartnerDto();
+		partnerDto.setId(partner.getId());
+		partnerDto.setUserId(parse(partner.getUserId()));
+		partnerDto.setMoney(partner.getMoney());
+		partnerDto.setDateCreated(partner.getDateCreated());
+		
+		return partnerDto;
 	}
 }

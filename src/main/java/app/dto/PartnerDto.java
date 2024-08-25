@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 public class PartnerDto {
 
     private long id;
-    private UserDto user;
+    private UserDto userId;
     private double money;
     private String type;
     private Timestamp dateCreated;
@@ -25,13 +25,15 @@ public class PartnerDto {
         this.id = id;
     }
 
-    public UserDto getUser() {
-        return user;
+    public UserDto getUserId() {
+        return userId;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setUserId(UserDto userId) {
+        this.userId = userId;
     }
+
+   
 
     public double getMoney() {
         return money;
