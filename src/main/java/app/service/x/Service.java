@@ -93,13 +93,23 @@ public class Service implements AdminService, LoginService, PartnerService {
             this.partnerDao.createPartner(partnerDto);
        } catch (SQLException e) {
             this.personDao.deletePerson(userDto.getPersonId());
-            throw new Exception("error al crear el usuario");
+            throw new Exception("error al crear el partner");
        }
     }
     @Override
     public void createGuest (GuestDto guestDto) throws Exception{
-         this.createUser(guestDto.getUserId());
-         
+        this.createUser(guestDto.getUserId());
+        UserDto userDto = userDao.findByUserName(guestDto.getUserId());
+        guestDto.setUserId(userDto);
+           PartnerDto partnerDto = partnerDao.existByPartner(user);
+        guestDto.setPartnerId(partnerDto);
+       try {
+             guestDao.createGuest(guestDto);
+       } catch (SQLException e) {
+            
+            throw new Exception("error al crear el invitador");
+       }
+    }
      }
     /*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {
         InvoiceDto orderDto = new InvoiceDto();
@@ -112,5 +122,5 @@ public class Service implements AdminService, LoginService, PartnerService {
         orderDao.createOrder(orderDto);
         return orderDto;*/
 
-}
+
 

@@ -41,18 +41,23 @@ public class PartnerDaoImplemetation implements PartnerDao {
     }
 
 
+   
+    
+     
+    
+
     @Override
-    public PartnerDto existByPartner(PartnerDto partnerDto) throws Exception {
-      String query = "SELECT ID,USERID,AMOUNT,TYPE ,CREACIONDATE FROM USER WHERE USERNAME = ?";
+    public PartnerDto existByPartner(UserDto userDto) throws Exception {
+        String query = "SELECT ID,USERID,AMOUNT,TYPE ,CREATIONDATE FROM PARTNER WHERE USERID = ?";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setLong(1, partnerDto.getId());
+        preparedStatement.setLong(1, userDto.getId());
         ResultSet resulSet = preparedStatement.executeQuery();
         if (resulSet.next()) {
             Partner partner = new Partner();
             partner.setId(resulSet.getLong("ID"));
             partner.setMoney(resulSet.getDouble("AMOUNT"));
             partner.setType(resulSet.getString("TYPE"));
-            partner.setDateCreated(resulSet.getDateCreated("CREACIONDATE"));
+            partner.setDateCreated(resulSet.getTimestamp("CREATIONDATE"));
             User user = new User();
             user.setId(resulSet.getLong("USERID"));
             partner.setUserId(user);
@@ -64,5 +69,7 @@ public class PartnerDaoImplemetation implements PartnerDao {
         preparedStatement.close();
         return null;
     }
+
     }
+    
 

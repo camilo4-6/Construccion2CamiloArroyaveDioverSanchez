@@ -23,9 +23,9 @@ public class GuestDaoImplemetation implements GuestDao {
         Guest guest = Helper.parse(guestDto);
         String query = "INSERT INTO PARTNER(USERID,PARTNERID,STATUS) VALUES (?, ?,?)";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setLong(1, guest.getUserId();
+        preparedStatement.setLong(1, guest.getUserId().getId());
         preparedStatement.setLong(2, guest.getPartnerId().getId());
-        preparedStatement.setString(3, guest.isStatus());
+        preparedStatement.setString(3, guest.getStatus());
         preparedStatement.execute();
         preparedStatement.close();
     }

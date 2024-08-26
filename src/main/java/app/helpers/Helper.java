@@ -81,7 +81,7 @@ public abstract class Helper {
 		guest.setId(guestDto.getId());
 		guest.setUserId(parse(guestDto.getUserId()));
 		guest.setPartnerId(parse(guestDto.getPartnerId()));
-		guest.setStatus(guestDto.isStatus());
+		guest.setStatus(guestDto.getStatus());
 		
 		return guest;
 	}
@@ -91,7 +91,7 @@ public abstract class Helper {
 		guestDto .setId(guest.getId());
 		guestDto .setUserId(parse(guest.getUserId()));
 		guestDto .setPartnerId(parse(guest.getPartnerId()));
-		guestDto .setStatus(guest.isStatus());
+		guestDto .setStatus(guest.getStatus());
 		
 		return guestDto;
 	}

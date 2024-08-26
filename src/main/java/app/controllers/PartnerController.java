@@ -12,6 +12,7 @@ import app.dto.GuestDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Partner;
+import app.service.interfac.PartnerService;
 import app.service.x.Service;
 
 /**
@@ -24,11 +25,13 @@ public class PartnerController implements ControllerInterface {
     private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agregar fondos. \n 3.para gastar en x cosa . \n 4. para ver historial de facturas";
     private PersonValidator personValidator;
     private UserValidator userValidator;
+      private PartnerService service;
 
     public PartnerController() {
         this.partnerValidator = new PartnerValidator();
         this.personValidator = new PersonValidator();
         this.userValidator = new UserValidator();
+         this.service = new Service();
     }
 
     @Override
@@ -102,9 +105,9 @@ public class PartnerController implements ControllerInterface {
         userDto.setRole("guest");
         GuestDto guestDto =new GuestDto();
         guestDto.setUserId(userDto);
-        guestDto.isStatus();
-        
+        guestDto.setStatus("activo");
         System.out.println("se ha creado el usuario exitosamente ");
+        this.service.createGuest(guestDto);
     }
 
     private void addFounds() throws Exception{

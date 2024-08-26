@@ -10,7 +10,7 @@ public class GuestController implements ControllerInterface {
 
     public GuestController() {
     }
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para gastar \n 2. Pasar a Vip  \n 3. Generar lista de vips\n 4. Para cerrar sesion\n";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para gastar \n 2. Pasar a Vip  \n 3. Para cerrar sesion\n";
 
     @Override
     public void session() throws Exception {
@@ -47,10 +47,8 @@ public class GuestController implements ControllerInterface {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
-            case "4": {
-                System.out.println("se ha cerrado sesion");
-                return false;
-            }
+          
+         
             default: {
                 System.out.println("ingrese una opcion valida");
                 return true;

@@ -32,6 +32,7 @@ app\model\Guest.class
 app\model\User.class
 app\controllers\Utils.class
 app\service\x\Service.class
+app\Daoo\GuestDaoImplemetation.class
 app\controller\validator\GuestValidator.class
 app\dao\interfaces\PersonDao.class
 app\config\MYSQLConnection.class
