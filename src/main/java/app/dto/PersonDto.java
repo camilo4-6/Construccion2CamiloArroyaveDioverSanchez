@@ -9,13 +9,21 @@ package app.dto;
  * @author Camilo
  */
 public class PersonDto {
-
+    private int guestCount;
     private long id;
     private long document;
     private String name;
     private long celPhone;
 
     public PersonDto() {
+    }
+
+    public int getGuestCount() {
+        return guestCount;
+    }
+
+    public void setGuestCount(int guestCount) {
+        this.guestCount = guestCount;
     }
 
     public long getId() {

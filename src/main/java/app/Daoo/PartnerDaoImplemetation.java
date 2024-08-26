@@ -7,10 +7,12 @@ package app.Daoo;
 import app.config.MYSQLConnection;
 import app.dao.interfaces.PartnerDao;
 import app.dto.PartnerDto;
+import app.dto.PersonDto;
 
 import app.dto.UserDto;
 import app.helpers.Helper;
 import app.model.Partner;
+import app.model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -38,9 +40,29 @@ public class PartnerDaoImplemetation implements PartnerDao {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+
     @Override
-    public boolean existsByUser(UserDto userDto) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public PartnerDto existByPartner(PartnerDto partnerDto) throws Exception {
+      String query = "SELECT ID,USERID,AMOUNT,TYPE ,CREACIONDATE FROM USER WHERE USERNAME = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setLong(1, partnerDto.getId());
+        ResultSet resulSet = preparedStatement.executeQuery();
+        if (resulSet.next()) {
+            Partner partner = new Partner();
+            partner.setId(resulSet.getLong("ID"));
+            partner.setMoney(resulSet.getDouble("AMOUNT"));
+            partner.setType(resulSet.getString("TYPE"));
+            partner.setDateCreated(resulSet.getDateCreated("CREACIONDATE"));
+            User user = new User();
+            user.setId(resulSet.getLong("USERID"));
+            partner.setUserId(user);
+            resulSet.close();
+            preparedStatement.close();
+            return Helper.parse(partner);
+        }
+        resulSet.close();
+        preparedStatement.close();
+        return null;
+    }
     }
 
-}

@@ -10,7 +10,7 @@ package app.dto;
  */
 public class GuestDto {
 
-    private long idDto;
+    private long id;
     private UserDto userId;
     private PartnerDto partnerId;
     private boolean status;
@@ -18,13 +18,15 @@ public class GuestDto {
     public GuestDto() {
     }
 
-    public long getIdDto() {
-        return idDto;
+    public long getId() {
+        return id;
     }
 
-    public void setIdDto(long idDto) {
-        this.idDto = idDto;
+    public void setId(long id) {
+        this.id = id;
     }
+
+   
 
     public UserDto getUserId() {
         return userId;

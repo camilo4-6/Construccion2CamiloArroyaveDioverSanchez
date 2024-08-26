@@ -8,6 +8,7 @@ import app.controller.validator.GuestValidator;
 import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
+import app.dto.GuestDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Partner;
@@ -99,6 +100,10 @@ public class PartnerController implements ControllerInterface {
         userDto.setUserName(userName);
         userDto.setPassword(password);
         userDto.setRole("guest");
+        GuestDto guestDto =new GuestDto();
+        guestDto.setUserId(userDto);
+        guestDto.isStatus();
+        
         System.out.println("se ha creado el usuario exitosamente ");
     }
 
@@ -107,4 +112,7 @@ public class PartnerController implements ControllerInterface {
         String money = Utils.getReader().nextLine();
         partnerValidator.validMoney(money);
            }
+    private void Status() throws Exception{
+       
+    }
 }

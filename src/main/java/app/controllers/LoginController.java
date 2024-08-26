@@ -20,7 +20,7 @@ public class LoginController implements ControllerInterface {
     private UserValidator userValidator;
     private LoginService service;
     private static final String MENU = "ingrese la opcion que desea: \n 1. para iniciar sesion. \n 2. para detener la ejecucion.";
-    private Map<String, ControllerInterface> rol;
+    private Map<String, ControllerInterface> role;
 
     public LoginController() {
         this.userValidator = new UserValidator();
@@ -28,10 +28,10 @@ public class LoginController implements ControllerInterface {
         ControllerInterface adminController = new AdminController();
         ControllerInterface partnerController = new PartnerController();
         ControllerInterface guestController = new GuestController();
-        this.rol = new HashMap<String,ControllerInterface>();
-        rol.put("admin", adminController);
-        rol.put("partner", partnerController);
-        rol.put("guest", guestController);
+        this.role = new HashMap<String,ControllerInterface>();
+        role.put("admin", adminController);
+        role.put("partner", partnerController);
+        role.put("guest", guestController);
     }
 
     @Override
@@ -82,10 +82,10 @@ public class LoginController implements ControllerInterface {
         userDto.setPassword(password);
         userDto.setUserName(userName);
         this.service.login(userDto);
-        if (rol.get(userDto.getRole()) == null) {
+        if (role.get(userDto.getRole()) == null) {
             throw new Exception("Rol invalido");
         }
-        rol.get(userDto.getRole()).session();
+        role.get(userDto.getRole()).session();
 
     }
 

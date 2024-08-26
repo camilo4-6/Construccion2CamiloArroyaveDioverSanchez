@@ -36,10 +36,8 @@ public class Service implements AdminService, LoginService, PartnerService {
         this.partnerDao = new PartnerDaoImplemetation();
     }
 
-    @Override
-    public void createGuest(UserDto userDto) throws Exception {
-        this.createUser(userDto);
-    }
+   
+    
 
     @Override
     public void login(UserDto userDto) throws Exception {
@@ -96,7 +94,13 @@ public class Service implements AdminService, LoginService, PartnerService {
        } catch (SQLException e) {
             this.personDao.deletePerson(userDto.getPersonId());
             throw new Exception("error al crear el usuario");
-
+       }
+    }
+    @Override
+    public void createGuest (GuestDto guestDto) throws Exception{
+         this.createUser(guestDto.getUserId());
+         
+     }
     /*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {
         InvoiceDto orderDto = new InvoiceDto();
         orderDto.setCreationDate(new Date(clinicalHistoryDto.getDate()));
@@ -107,6 +111,6 @@ public class Service implements AdminService, LoginService, PartnerService {
         orderDto.setVeterinarian(clinicalHistoryDto.getVeterinarian());
         orderDao.createOrder(orderDto);
         return orderDto;*/
+
 }
-    }
-}
+
