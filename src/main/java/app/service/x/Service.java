@@ -1,5 +1,6 @@
 package app.service.x;
 
+import app.Daoo.GuestDaoImplemetation;
 import app.Daoo.PartnerDaoImplemetation;
 import app.Daoo.PersonDaoImplementation;
 import app.Daoo.UserDaoImplementation;
@@ -14,6 +15,8 @@ import app.dto.InvoiceDto;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
+import app.helpers.Helper;
+import app.model.Person;
 import app.service.interfac.AdminService;
 import app.service.interfac.LoginService;
 import app.service.interfac.PartnerService;
@@ -34,10 +37,8 @@ public class Service implements AdminService, LoginService, PartnerService {
         this.userDao = new UserDaoImplementation();
         this.personDao = new PersonDaoImplementation();
         this.partnerDao = new PartnerDaoImplemetation();
+        this.guestDao = new GuestDaoImplemetation();
     }
-
-   
-    
 
     @Override
     public void login(UserDto userDto) throws Exception {
@@ -76,42 +77,46 @@ public class Service implements AdminService, LoginService, PartnerService {
     }
 
     private void createPerson(PersonDto personDto) throws Exception {
-      
-     if  (this.personDao.existByDocument(personDto)) {
-         throw new Exception("Ya existe una persona con este documento");
-     } 
-        
-         this.personDao.createPerson(personDto);
+
+        if (this.personDao.existByDocument(personDto)) {
+            throw new Exception("Ya existe una persona con este documento");
+        }
+
+        this.personDao.createPerson(personDto);
     }
- 
+
     @Override
     public void createPartner(PartnerDto partnerDto) throws Exception {
         this.createUser(partnerDto.getUserId());
-       UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
+        UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
         partnerDto.setUserId(userDto);
-       try {
+        try {
             this.partnerDao.createPartner(partnerDto);
-       } catch (SQLException e) {
+        } catch (SQLException e) {
             this.personDao.deletePerson(userDto.getPersonId());
             throw new Exception("error al crear el partner");
-       }
+        }
     }
+
     @Override
-    public void createGuest (GuestDto guestDto) throws Exception{
+    public void createGuest(GuestDto guestDto) throws Exception {
         this.createUser(guestDto.getUserId());
         UserDto userDto = userDao.findByUserName(guestDto.getUserId());
         guestDto.setUserId(userDto);
-           PartnerDto partnerDto = partnerDao.existByPartner(user);
+        PartnerDto partnerDto = partnerDao.existByPartner(user);
         guestDto.setPartnerId(partnerDto);
-       try {
-             guestDao.createGuest(guestDto);
-       } catch (SQLException e) {
-            
-            throw new Exception("error al crear el invitador");
-       }
+        try {
+            this.guestDao.createGuest(guestDto);
+        } catch (SQLException e) {
+            this.personDao.deletePerson(userDto.getPersonId());
+      
+           throw new Exception("error al crear el invitador",e);
+        }
     }
-     }
-    /*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {
+
+}
+
+/*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {
         InvoiceDto orderDto = new InvoiceDto();
         orderDto.setCreationDate(new Date(clinicalHistoryDto.getDate()));
         orderDto.setId(getId());
@@ -121,6 +126,14 @@ public class Service implements AdminService, LoginService, PartnerService {
         orderDto.setVeterinarian(clinicalHistoryDto.getVeterinarian());
         orderDao.createOrder(orderDto);
         return orderDto;*/
-
-
-
+ /*this.createUser(guestDto.getUserId());
+        UserDto userDto = userDao.findByUserName(guestDto.getUserId());
+        guestDto.setUserId(userDto);
+           PartnerDto partnerDto = partnerDao.existByPartner(user);
+        guestDto.setPartnerId(partnerDto);
+       try {
+             guestDao.createGuest(guestDto);
+       } catch (SQLException e) {
+            
+            throw new Exception("error al crear el invitador");
+       }*/

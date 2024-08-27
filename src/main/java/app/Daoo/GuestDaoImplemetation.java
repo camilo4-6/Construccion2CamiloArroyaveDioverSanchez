@@ -21,7 +21,7 @@ public class GuestDaoImplemetation implements GuestDao {
     @Override
     public void createGuest(GuestDto guestDto) throws SQLException {
         Guest guest = Helper.parse(guestDto);
-        String query = "INSERT INTO PARTNER(USERID,PARTNERID,STATUS) VALUES (?, ?,?)";
+        String query = "INSERT INTO GUEST (USERID,PARTNERID,STATUS) VALUES (?, ?,?)";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
         preparedStatement.setLong(1, guest.getUserId().getId());
         preparedStatement.setLong(2, guest.getPartnerId().getId());

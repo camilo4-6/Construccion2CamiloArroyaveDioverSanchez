@@ -48,7 +48,7 @@ public class PartnerDaoImplemetation implements PartnerDao {
 
     @Override
     public PartnerDto existByPartner(UserDto userDto) throws Exception {
-        String query = "SELECT ID,USERID,AMOUNT,TYPE ,CREATIONDATE FROM PARTNER WHERE USERID = ?";
+        String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE USERID = ?";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
         preparedStatement.setLong(1, userDto.getId());
         ResultSet resulSet = preparedStatement.executeQuery();
