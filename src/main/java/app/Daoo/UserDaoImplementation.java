@@ -70,4 +70,15 @@ public class UserDaoImplementation implements UserDao {
         preparedStatement.close();
     }
 
+    @Override
+    public void deleteUser(UserDto userDto) throws Exception {
+        User user = Helper.parse(userDto);
+        String query = "DELETE FROM USER WHERE PERSONNID = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setLong(1, user.getPersonId().getId());
+        preparedStatement.execute();
+        preparedStatement.close();
+
+    }
+
 }

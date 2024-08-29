@@ -4,16 +4,26 @@
  */
 package app.controllers;
 
+import app.Daoo.GuestDaoImplemetation;
+import app.Daoo.PartnerDaoImplemetation;
+import app.Daoo.PersonDaoImplementation;
+import app.Daoo.UserDaoImplementation;
 import app.controller.validator.GuestValidator;
 import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
+import app.dao.interfaces.GuestDao;
+import app.dao.interfaces.PartnerDao;
+import app.dao.interfaces.PersonDao;
+import app.dao.interfaces.UserDao;
 import app.dto.GuestDto;
+import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Partner;
 import app.service.interfac.PartnerService;
 import app.service.x.Service;
+import java.sql.SQLException;
 
 /**
  *
@@ -22,26 +32,33 @@ import app.service.x.Service;
 public class PartnerController implements ControllerInterface {
 
     private PartnerValidator partnerValidator;
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agregar fondos. \n 3.para gastar en x cosa . \n 4. para ver historial de facturas";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado.  \n 2. para activar invitado. \n 3. para desactivar socio\n 4. para solicitar promocio \n 5. para solicitar baja  \n 6. para cerrar sesion \n ";
     private PersonValidator personValidator;
     private UserValidator userValidator;
-      private PartnerService service;
+    private PartnerService service;
+    private PartnerDao partnerDao;
+    private PersonDao personDao;
+    private UserDao userDao;
 
     public PartnerController() {
         this.partnerValidator = new PartnerValidator();
         this.personValidator = new PersonValidator();
         this.userValidator = new UserValidator();
-         this.service = new Service();
+        this.service = new Service();
+        this.partnerDao = new PartnerDaoImplemetation();
+        this.personDao = new PersonDaoImplementation();
+        this.userDao = new UserDaoImplementation();
     }
 
     @Override
-   public void session() throws Exception {
-		boolean session = true;
-		while (session) {
-			session = partnerSession();
-		}
+    public void session() throws Exception {
+        boolean session = true;
+        while (session) {
+            session = partnerSession();
+        }
 
-	}
+    }
+
     private boolean partnerSession() {
         try {
             System.out.println("bienvenido " + Service.user.getUserName());
@@ -62,14 +79,15 @@ public class PartnerController implements ControllerInterface {
                 return true;
             }
             case "2": {
-                this.addFounds();
+                System.out.println("");;
                 return true;
             }
-            case "3": {
-                System.out.println("se ha cerrado sesion");
+            case "5": {
+
+                this.deletePartner();
                 return false;
             }
-            case "4": {
+            case "6": {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
@@ -103,19 +121,20 @@ public class PartnerController implements ControllerInterface {
         userDto.setUserName(userName);
         userDto.setPassword(password);
         userDto.setRole("guest");
-        GuestDto guestDto =new GuestDto();
+        GuestDto guestDto = new GuestDto();
         guestDto.setUserId(userDto);
         guestDto.setStatus("activo");
         System.out.println("se ha creado el usuario exitosamente ");
         this.service.createGuest(guestDto);
     }
 
-    private void addFounds() throws Exception{
-        System.out.println("Cuanto quiere ingresar?");
-        String money = Utils.getReader().nextLine();
-        partnerValidator.validMoney(money);
-           }
-    private void Status() throws Exception{
-       
+    public void deletePartner() throws Exception {
+        this.service.deletePartner();
+
+    }
+
+    public void statusGuest() throws Exception {
+
+        System.out.println("ingrese 1. si desea activar el invitado // Ingrese 2.si desea desactivar el invitado");
     }
 }

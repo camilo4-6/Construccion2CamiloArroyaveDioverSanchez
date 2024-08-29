@@ -9,6 +9,7 @@ package app.dto;
  * @author Camilo
  */
 public class PersonDto {
+
     private int guestCount;
     private long id;
     private long document;
@@ -30,8 +31,6 @@ public class PersonDto {
         return id;
     }
 
-  
-
     public void setId(long id) {
         this.id = id;
     }
@@ -43,8 +42,6 @@ public class PersonDto {
     public void setDocument(long document) {
         this.document = document;
     }
-
-   
 
     public String getName() {
         return name;

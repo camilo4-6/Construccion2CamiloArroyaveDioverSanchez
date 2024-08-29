@@ -26,8 +26,6 @@ public class GuestDto {
         this.id = id;
     }
 
-   
-
     public UserDto getUserId() {
         return userId;
     }
@@ -51,7 +49,5 @@ public class GuestDto {
     public void setStatus(String status) {
         this.status = status;
     }
-
-  
 
 }

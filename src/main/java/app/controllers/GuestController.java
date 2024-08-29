@@ -47,8 +47,7 @@ public class GuestController implements ControllerInterface {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
-          
-         
+
             default: {
                 System.out.println("ingrese una opcion valida");
                 return true;

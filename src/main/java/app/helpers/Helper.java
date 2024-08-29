@@ -21,22 +21,22 @@ public abstract class Helper {
 
     public static PersonDto parse(Person person) {
 
-       if (person != null) {
-        PersonDto personDto = new PersonDto();
-        personDto.setId(person.getId());
-        personDto.setDocument(person.getDocument());
-        personDto.setName(person.getName());
-        personDto.setCelPhone(person.getCelPhone());
-        return personDto;
-    } else {
-        // Crear un PersonDto con valores predeterminados
-        PersonDto personDto = new PersonDto();
-        personDto.setId(14234); // Valor por defecto, o un ID que indique "no encontrado"
-        personDto.setDocument(123); // Valor predeterminado para documento
-        personDto.setName("Desconocido"); // Valor predeterminado para nombre
-        personDto.setCelPhone(42343241); // Valor predeterminado para teléfono
-        return personDto;
-    }
+        if (person != null) {
+            PersonDto personDto = new PersonDto();
+            personDto.setId(person.getId());
+            personDto.setDocument(person.getDocument());
+            personDto.setName(person.getName());
+            personDto.setCelPhone(person.getCelPhone());
+            return personDto;
+        } else {
+
+            PersonDto personDto = new PersonDto();
+            personDto.setId(14234);
+            personDto.setDocument(123);
+            personDto.setName("Desconocido");
+            personDto.setCelPhone(42343241);
+            return personDto;
+        }
     }
 
     public static Person parse(PersonDto personDto) {

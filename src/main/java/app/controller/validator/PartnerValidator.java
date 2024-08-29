@@ -17,5 +17,5 @@ public class PartnerValidator extends CommonsValidator {
     public double validMoney(String money) throws Exception {
         return super.isValidDouble("El valor ingresado", money);
     }
-    
+
 }

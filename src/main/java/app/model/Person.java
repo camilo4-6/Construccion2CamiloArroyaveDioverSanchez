@@ -30,8 +30,6 @@ public class Person {
         this.document = document;
     }
 
-   
-
     public String getName() {
         return name;
     }

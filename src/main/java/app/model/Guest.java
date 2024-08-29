@@ -46,5 +46,4 @@ public class Guest {
         this.status = status;
     }
 
-  
 }

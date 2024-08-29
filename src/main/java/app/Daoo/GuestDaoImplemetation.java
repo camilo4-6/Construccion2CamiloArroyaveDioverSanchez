@@ -9,8 +9,11 @@ import app.dao.interfaces.GuestDao;
 import app.dto.GuestDto;
 import app.helpers.Helper;
 import app.model.Guest;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *

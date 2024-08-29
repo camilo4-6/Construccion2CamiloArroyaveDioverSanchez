@@ -33,8 +33,6 @@ public class PartnerDto {
         this.userId = userId;
     }
 
-   
-
     public double getMoney() {
         return money;
     }

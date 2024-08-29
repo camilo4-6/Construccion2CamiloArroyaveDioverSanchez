@@ -6,13 +6,12 @@ package app.dao.interfaces;
 
 import app.dto.GuestDto;
 
-
 /**
  *
  * @author Camilo
  */
 public interface GuestDao {
-        public void createGuest(GuestDto guestDto) throws Exception;
-        
+
+    public void createGuest(GuestDto guestDto) throws Exception;
 
 }

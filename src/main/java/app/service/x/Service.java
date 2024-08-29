@@ -32,6 +32,7 @@ public class Service implements AdminService, LoginService, PartnerService {
     private InvoiceDao invoiceDao;
     private GuestDao guestDao;
     public static UserDto user;
+    public static PersonDto person;
 
     public Service() {
         this.userDao = new UserDaoImplementation();
@@ -109,8 +110,25 @@ public class Service implements AdminService, LoginService, PartnerService {
             this.guestDao.createGuest(guestDto);
         } catch (SQLException e) {
             this.personDao.deletePerson(userDto.getPersonId());
-      
-           throw new Exception("error al crear el invitador",e);
+
+            throw new Exception("error al crear el invitador", e);
+        }
+    }
+
+    @Override
+    public void deletePartner() throws Exception {
+        UserDto user = Service.user;
+        try {
+            PartnerDto partnerDto = this.partnerDao.existByPartner(user);
+            UserDto userDto = this.userDao.findByUserName(user);
+
+            this.partnerDao.deletePartner(partnerDto);
+            this.userDao.deleteUser(userDto);
+            this.personDao.deletePerson(user.getPersonId());
+            System.out.println("Su cuenta ha sido eliminada exitosamente.");
+            this.logout();
+        } catch (SQLException e) {
+            System.out.println("El usuario no existe en la base de datos.");
         }
     }
 

@@ -9,5 +9,6 @@ package app.controllers;
  * @author Camilo
  */
 public interface ControllerInterface {
+
     public void session() throws Exception;
 }

@@ -59,6 +59,4 @@ public class UserDto {
         this.role = role;
     }
 
-   
-
 }

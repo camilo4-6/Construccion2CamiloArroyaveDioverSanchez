@@ -98,8 +98,6 @@ public class AdminController implements ControllerInterface {
         System.out.println("ingrese la contraseña ");
         String password = Utils.getReader().nextLine();
         userValidator.validUserName(password);
-        System.out.println("Ingrese la cantidad de dinero de socio (50.000 min - 1.000.000 max)");
-        double money = partnerValidator.validMoney(Utils.getReader().nextLine());
         PersonDto personDto = new PersonDto();
         personDto.setName(name);
         personDto.setDocument(document);
@@ -111,22 +109,15 @@ public class AdminController implements ControllerInterface {
         userDto.setRole("partner");
         PartnerDto partnerDto = new PartnerDto();
         partnerDto.setUserId(userDto);
-        partnerDto.setMoney(money);
+        partnerDto.setMoney(50000);
         partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
-        if (money < 1000000) {
-            partnerDto.setType("regular");
-        } else {
-            partnerDto.setType("Vip");
-        }
-        
+        partnerDto.setType("regular");
+
+        this.service.createPartner(partnerDto);
         System.out.println("se ha creado el usuario exitosamente ");
         System.out.println("Tipo de socio: " + partnerDto.getType());
-        System.out.println("Y se creo en el momento " + partnerDto.getDateCreated());
-        this.service.createPartner(partnerDto);
+        System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
+        System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
     }
-      
 
-               
-           
-       }
-
+}

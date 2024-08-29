@@ -9,5 +9,5 @@ package app.dao.interfaces;
  * @author Camilo
  */
 public interface InvoiceDetailDao {
-    
+
 }
