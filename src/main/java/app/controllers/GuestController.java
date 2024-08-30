@@ -89,7 +89,7 @@ public class GuestController implements ControllerInterface {
         System.out.println("Tipo de socio: " + partnerDto.getType());
         System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
         System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
-        this.servic.deleteGuest(partnerDto);
+        this.servic.changeRol(partnerDto);
     }
 
     public void deleteGuest() throws Exception {

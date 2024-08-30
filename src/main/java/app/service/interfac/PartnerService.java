@@ -14,5 +14,5 @@ public interface PartnerService {
 
     public void deletePartner() throws Exception;
     
-    public void deleteGuest(PartnerDto partnerDto) throws Exception;         
+    public void changeRol(PartnerDto partnerDto) throws Exception;         
 }

@@ -136,7 +136,7 @@ public class Service implements AdminService, LoginService, PartnerService {
     }
 
     @Override
-    public void deleteGuest(PartnerDto partnerDto) throws Exception {
+    public void changeRol(PartnerDto partnerDto) throws Exception {
 
         UserDto users = Service.user;
         GuestDto guestDto = this.guestDao.existByGuest(users);

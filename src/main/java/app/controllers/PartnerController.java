@@ -135,7 +135,7 @@ public class PartnerController implements ControllerInterface {
     }
 
     public void statusGuest() throws Exception {
-
-        System.out.println("ingrese 1. si desea activar el invitado // Ingrese 2.si desea desactivar el invitado");
+ System.out.println("ingrese 1. si desea activar el invitado // Ingrese 2.si desea desactivar el invitado");
+ 
     }
 }

@@ -23,7 +23,7 @@ import java.sql.Timestamp;
  */
 public class AdminController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Ver facturas (Socios,Invitados)  \n 3. Generar lista de vips\n 4. Para cerrar sesion\n";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Para cerrar sesion\n";
     private PersonValidator personValidator;
     private UserValidator userValidator;
     private AdminService service;
@@ -66,16 +66,15 @@ public class AdminController implements ControllerInterface {
                 return true;
             }
             case "2": {
-                //this.invoiceHistory();
-                return true;
+                System.out.println("se ha cerrado sesion");
+                return false;
             }
             case "3": {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
             case "4": {
-                System.out.println("se ha cerrado sesion");
-                return false;
+               
             }
             default: {
                 System.out.println("ingrese una opcion valida");

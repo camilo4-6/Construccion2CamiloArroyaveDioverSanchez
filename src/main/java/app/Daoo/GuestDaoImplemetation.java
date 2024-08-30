@@ -72,4 +72,13 @@ public class GuestDaoImplemetation implements GuestDao {
         return null;
     }
 
+    @Override
+    public void statusGuest(UserDto userDto, GuestDto guestDto) throws Exception {
+      String query = "UPDATE GUEST SET STATUS = ? WHERE USERNAME = ?";
+         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setString(1, guestDto.getStatus());
+        preparedStatement.setString(2, userDto.getUserName());
+        preparedStatement.executeUpdate();
+    }
+
 }
