@@ -32,6 +32,7 @@ public class PersonDaoImplementation implements PersonDao {
 
     @Override
     public void createPerson(PersonDto personDto) throws Exception {
+      
         Person person = Helper.parse(personDto);
         String query = "INSERT INTO PERSON(NAME,DOCUMENT,CELLPHONE) VALUES (?,?,?) ";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
@@ -47,7 +48,7 @@ public class PersonDaoImplementation implements PersonDao {
         Person person = Helper.parse(personDto);
         String query = "DELETE FROM PERSON WHERE DOCUMENT = ?";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setLong(1, person.getDocument());
+        preparedStatement.setLong(1, personDto.getDocument());
         preparedStatement.execute();
         preparedStatement.close();
     }
@@ -68,10 +69,11 @@ public class PersonDaoImplementation implements PersonDao {
             resulSet.close();
             preparedStatement.close();
             return Helper.parse(person);
+        } else {
+            resulSet.close();
+            preparedStatement.close();
+            return null;
         }
-        resulSet.close();
-        preparedStatement.close();
-        return null;
     }
 
 }

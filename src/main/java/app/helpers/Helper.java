@@ -21,25 +21,23 @@ public abstract class Helper {
 
     public static PersonDto parse(Person person) {
 
-        if (person != null) {
-            PersonDto personDto = new PersonDto();
-            personDto.setId(person.getId());
-            personDto.setDocument(person.getDocument());
-            personDto.setName(person.getName());
-            personDto.setCelPhone(person.getCelPhone());
-            return personDto;
-        } else {
-
-            PersonDto personDto = new PersonDto();
-            personDto.setId(14234);
-            personDto.setDocument(123);
-            personDto.setName("Desconocido");
-            personDto.setCelPhone(42343241);
-            return personDto;
+        if (person == null) {
+            return null; 
         }
+        PersonDto personDto = new PersonDto();
+        personDto.setId(person.getId());
+        personDto.setDocument(person.getDocument());
+        personDto.setName(person.getName());
+        personDto.setCelPhone(person.getCelPhone());
+        return personDto;
     }
 
+    
+
     public static Person parse(PersonDto personDto) {
+        if (personDto == null) {
+            return null; 
+        }
         Person person = new Person();
         person.setId(personDto.getId());
         person.setDocument(personDto.getDocument());
@@ -47,8 +45,10 @@ public abstract class Helper {
         person.setCelPhone(personDto.getCelPhone());
         return person;
     }
-
     public static UserDto parse(User user) {
+         if (user == null) {
+        return null; 
+    }
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setPassword(user.getPassword());
@@ -59,6 +59,9 @@ public abstract class Helper {
     }
 
     public static User parse(UserDto userDto) {
+         if (userDto == null) {
+        return null; 
+    }
         User user = new User();
         user.setId(userDto.getId());
         user.setPassword(userDto.getPassword());
@@ -69,24 +72,32 @@ public abstract class Helper {
     }
 
     public static Partner parse(PartnerDto partnerDto) {
-        Partner partner = new Partner();
-        partner.setId(partnerDto.getId());
-        partner.setUserId(parse(partnerDto.getUserId()));
-        partner.setMoney(partnerDto.getMoney());
-        partner.setType(partnerDto.getType());
-        partner.setDateCreated(partnerDto.getDateCreated());
-        return partner;
+            
+        if (partnerDto == null) {
+        return null;
     }
+    Partner partner = new Partner();
+    partner.setId(partnerDto.getId());
+    partner.setUserId(parse(partnerDto.getUserId()));
+    partner.setMoney(partnerDto.getMoney());
+    partner.setType(partnerDto.getType());
+    partner.setDateCreated(partnerDto.getDateCreated());
+    return partner;
+}
+
+    
 
     public static PartnerDto parse(Partner partner) {
-        PartnerDto partnerDto = new PartnerDto();
-        partnerDto.setId(partner.getId());
-        partnerDto.setUserId(parse(partner.getUserId()));
-        partnerDto.setMoney(partner.getMoney());
-        partnerDto.setDateCreated(partner.getDateCreated());
-
-        return partnerDto;
+         if (partner == null) {
+        return null; 
     }
+    PartnerDto partnerDto = new PartnerDto();
+    partnerDto.setId(partner.getId());
+    partnerDto.setUserId(parse(partner.getUserId()));
+    partnerDto.setMoney(partner.getMoney());
+    partnerDto.setDateCreated(partner.getDateCreated());
+    return partnerDto;
+}
 
     public static Guest parse(GuestDto guestDto) {
         Guest guest = new Guest();

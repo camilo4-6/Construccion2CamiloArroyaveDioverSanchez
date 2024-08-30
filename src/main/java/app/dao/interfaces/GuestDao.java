@@ -5,6 +5,7 @@
 package app.dao.interfaces;
 
 import app.dto.GuestDto;
+import app.dto.UserDto;
 
 /**
  *
@@ -13,5 +14,6 @@ import app.dto.GuestDto;
 public interface GuestDao {
 
     public void createGuest(GuestDto guestDto) throws Exception;
-
+    public void deleteGuest(GuestDto guestDto) throws Exception;
+    public GuestDto existByGuest(UserDto userDto)throws Exception;
 }

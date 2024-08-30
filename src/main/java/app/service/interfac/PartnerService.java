@@ -5,6 +5,7 @@
 package app.service.interfac;
 
 import app.dto.GuestDto;
+import app.dto.PartnerDto;
 
 
 public interface PartnerService {
@@ -12,5 +13,6 @@ public interface PartnerService {
     public void createGuest(GuestDto guestDto) throws Exception;
 
     public void deletePartner() throws Exception;
-
+    
+    public void deleteGuest(PartnerDto partnerDto) throws Exception;         
 }

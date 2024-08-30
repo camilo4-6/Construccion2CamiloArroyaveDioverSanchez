@@ -126,6 +126,7 @@ public class PartnerController implements ControllerInterface {
         guestDto.setStatus("activo");
         System.out.println("se ha creado el usuario exitosamente ");
         this.service.createGuest(guestDto);
+        
     }
 
     public void deletePartner() throws Exception {

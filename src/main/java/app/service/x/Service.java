@@ -16,6 +16,7 @@ import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.helpers.Helper;
+import app.model.Partner;
 import app.model.Person;
 import app.service.interfac.AdminService;
 import app.service.interfac.LoginService;
@@ -92,9 +93,10 @@ public class Service implements AdminService, LoginService, PartnerService {
         UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
         partnerDto.setUserId(userDto);
         try {
+            Partner partner = Helper.parse(partnerDto);
             this.partnerDao.createPartner(partnerDto);
         } catch (SQLException e) {
-            this.personDao.deletePerson(userDto.getPersonId());
+            this.userDao.deleteUser(userDto);
             throw new Exception("error al crear el partner");
         }
     }
@@ -109,7 +111,7 @@ public class Service implements AdminService, LoginService, PartnerService {
         try {
             this.guestDao.createGuest(guestDto);
         } catch (SQLException e) {
-            this.personDao.deletePerson(userDto.getPersonId());
+            this.userDao.deleteUser(userDto);
 
             throw new Exception("error al crear el invitador", e);
         }
@@ -117,14 +119,15 @@ public class Service implements AdminService, LoginService, PartnerService {
 
     @Override
     public void deletePartner() throws Exception {
-        UserDto user = Service.user;
+        UserDto users = Service.user;
         try {
-            PartnerDto partnerDto = this.partnerDao.existByPartner(user);
-            UserDto userDto = this.userDao.findByUserName(user);
+            PartnerDto partnerDto = this.partnerDao.existByPartner(users);
+            UserDto userDto = this.userDao.findByUserName(users);
+            this.userDao.existsByUserName(userDto);
 
             this.partnerDao.deletePartner(partnerDto);
             this.userDao.deleteUser(userDto);
-            this.personDao.deletePerson(user.getPersonId());
+            this.personDao.deletePerson(userDto.getPersonId());
             System.out.println("Su cuenta ha sido eliminada exitosamente.");
             this.logout();
         } catch (SQLException e) {
@@ -132,6 +135,24 @@ public class Service implements AdminService, LoginService, PartnerService {
         }
     }
 
+    @Override
+    public void deleteGuest(PartnerDto partnerDto) throws Exception {
+
+        UserDto users = Service.user;
+        GuestDto guestDto = this.guestDao.existByGuest(users);
+        this.guestDao.deleteGuest(guestDto);
+        UserDto userDto = userDao.findByUserName(users);
+        partnerDto.setUserId(userDto);
+        userDto.setRole("partner");
+        this.userDao.updateUserRole(userDto);
+        try {
+            this.partnerDao.createPartner(partnerDto);
+            System.out.println("Se ha convertido el Guest en Partner exitosamente.");
+            
+        } catch (SQLException e) {
+            System.out.println("El usuario no existe en la base de datos.");
+        }
+    }
 }
 
 /*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {

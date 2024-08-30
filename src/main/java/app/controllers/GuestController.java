@@ -4,13 +4,33 @@
  */
 package app.controllers;
 
+import app.controller.validator.PartnerValidator;
+import app.controller.validator.PersonValidator;
+import app.controller.validator.UserValidator;
+import app.dto.PartnerDto;
+import app.dto.PersonDto;
+import app.dto.UserDto;
+import app.service.interfac.AdminService;
+import app.service.interfac.PartnerService;
 import app.service.x.Service;
+import java.sql.Timestamp;
 
 public class GuestController implements ControllerInterface {
 
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para gastar \n 2. Pasar a Socio \n 3. Para cerrar sesion\n";
+    private PersonValidator personValidator;
+    private UserValidator userValidator;
+    private AdminService service;
+    private PartnerService servic;
+    private PartnerValidator partnerValidator;
+
     public GuestController() {
+        this.personValidator = new PersonValidator();
+        this.userValidator = new UserValidator();
+        this.service = new Service();
+        this.partnerValidator = new PartnerValidator();
+        this.servic = new Service();
     }
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para gastar \n 2. Pasar a Vip  \n 3. Para cerrar sesion\n";
 
     @Override
     public void session() throws Exception {
@@ -23,6 +43,7 @@ public class GuestController implements ControllerInterface {
     private boolean menu() {
         try {
             System.out.println("bienvenido " + Service.user.getUserName());
+            
             System.out.print(MENU);
             String option = Utils.getReader().nextLine();
             return options(option);
@@ -40,7 +61,7 @@ public class GuestController implements ControllerInterface {
                 return true;
             }
             case "2": {
-                System.out.println("");
+                this.createPartner();
                 return true;
             }
             case "3": {
@@ -55,4 +76,24 @@ public class GuestController implements ControllerInterface {
         }
     }
 
+    public void createPartner() throws Exception {
+        UserDto userDto = Service.user;
+        userDto.setRole("partner");
+        PartnerDto partnerDto = new PartnerDto();
+        partnerDto.setUserId(userDto);
+        partnerDto.setMoney(50000);
+        partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
+        partnerDto.setType("regular");
+        
+        System.out.println("se ha creado el usuario exitosamente ");
+        System.out.println("Tipo de socio: " + partnerDto.getType());
+        System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
+        System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
+        this.servic.deleteGuest(partnerDto);
+    }
+
+    public void deleteGuest() throws Exception {
+       
+
+    }
 }
