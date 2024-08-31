@@ -23,6 +23,7 @@ import app.service.interfac.LoginService;
 import app.service.interfac.PartnerService;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.List;
 
 public class Service implements AdminService, LoginService, PartnerService {
 
@@ -148,10 +149,37 @@ public class Service implements AdminService, LoginService, PartnerService {
         try {
             this.partnerDao.createPartner(partnerDto);
             System.out.println("Se ha convertido el Guest en Partner exitosamente.");
-            
+
         } catch (SQLException e) {
             System.out.println("El usuario no existe en la base de datos.");
         }
+    }
+
+    @Override
+    public void showGuestsForPartner(PartnerDto partnerDto) throws Exception {
+        UserDto users = Service.user;
+        List<GuestDto> guests = guestDao.statusGuest(partnerDto);
+
+        System.out.println("Invitados registrados para el socio con el user name " + users.getUserName() + ":");
+        for (GuestDto guest : guests) {
+
+            System.out.println("ID: " + guest.getId() + "\n UserID: " + guest.getUserId().getId() + "\n Status: " + guest.getStatus());
+
+        }
+    }
+
+    
+       
+    
+
+    @Override
+    public GuestDto getGuestById(long guestId) throws Exception {
+       return guestDao.getGuestById(guestId);
+    }
+
+    @Override
+    public void updateGuestStatus(GuestDto guestDto) throws Exception {
+        guestDao.changeStatus(guestDto);
     }
 }
 

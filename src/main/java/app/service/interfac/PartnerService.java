@@ -6,6 +6,7 @@ package app.service.interfac;
 
 import app.dto.GuestDto;
 import app.dto.PartnerDto;
+import app.dto.UserDto;
 
 
 public interface PartnerService {
@@ -14,5 +15,11 @@ public interface PartnerService {
 
     public void deletePartner() throws Exception;
     
-    public void changeRol(PartnerDto partnerDto) throws Exception;         
+    public void changeRol(PartnerDto partnerDto) throws Exception;     
+    
+    public void showGuestsForPartner(PartnerDto partnerDto) throws Exception;
+    
+    GuestDto getGuestById(long guestId) throws Exception ;
+    
+    public void updateGuestStatus(GuestDto guestDto) throws Exception;
 }

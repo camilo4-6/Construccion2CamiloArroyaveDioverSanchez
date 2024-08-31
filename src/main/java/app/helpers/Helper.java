@@ -100,6 +100,9 @@ public abstract class Helper {
 }
 
     public static Guest parse(GuestDto guestDto) {
+             if (guestDto == null) {
+        return null; 
+    }
         Guest guest = new Guest();
         guest.setId(guestDto.getId());
         guest.setUserId(parse(guestDto.getUserId()));
@@ -110,6 +113,9 @@ public abstract class Helper {
     }
 
     public static GuestDto parse(Guest guest) {
+             if (guest == null) {
+        return null; 
+    }
         GuestDto guestDto = new GuestDto();
         guestDto.setId(guest.getId());
         guestDto.setUserId(parse(guest.getUserId()));

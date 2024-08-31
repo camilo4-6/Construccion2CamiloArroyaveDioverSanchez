@@ -32,8 +32,9 @@ import java.sql.SQLException;
 public class PartnerController implements ControllerInterface {
 
     private PartnerValidator partnerValidator;
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado.  \n 2. para activar invitado. \n 3. para desactivar socio\n 4. para solicitar promocio \n 5. para solicitar baja  \n 6. para cerrar sesion \n ";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado.  \n 2. para mostrar invitados. \n 3. para activar \n 4. para solicitar promocio \n 5. para solicitar baja  \n 6. para cerrar sesion \n ";
     private PersonValidator personValidator;
+    private GuestValidator guestValidator;
     private UserValidator userValidator;
     private PartnerService service;
     private PartnerDao partnerDao;
@@ -79,7 +80,11 @@ public class PartnerController implements ControllerInterface {
                 return true;
             }
             case "2": {
-                System.out.println("");;
+                this.statusGuest();
+                return true;
+            }
+            case "3": {
+                this.changeStatus();
                 return true;
             }
             case "5": {
@@ -135,7 +140,32 @@ public class PartnerController implements ControllerInterface {
     }
 
     public void statusGuest() throws Exception {
- System.out.println("ingrese 1. si desea activar el invitado // Ingrese 2.si desea desactivar el invitado");
+          PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
+           if (partnerDto == null) {
+            System.out.println("No se encontró un socio asociado al usuario.");
+            return;
+        }
+         service.showGuestsForPartner(partnerDto);
+           
+         
+        
  
+    }
+    public void changeStatus()throws Exception{
+        System.out.println("Ingrese el ID del invitado cuyo estado desea cambiar:");
+        long guestId = Long.parseLong(Utils.getReader().nextLine());
+        GuestDto guestDto = service.getGuestById(guestId); 
+            if (guestDto == null) {
+            System.out.println("Invitado no encontrado.");
+            return;
+        }
+         System.out.println("Ingrese el nuevo estado (activo/inactivo):");
+        String Status = Utils.getReader().nextLine();
+        
+    
+        guestDto.setStatus(Status);
+        service.updateGuestStatus(guestDto);
+        System.out.println("Estado del invitado actualizado exitosamente.");
+         
     }
 }

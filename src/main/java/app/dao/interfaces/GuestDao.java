@@ -5,7 +5,9 @@
 package app.dao.interfaces;
 
 import app.dto.GuestDto;
+import app.dto.PartnerDto;
 import app.dto.UserDto;
+import java.util.List;
 
 /**
  *
@@ -14,7 +16,14 @@ import app.dto.UserDto;
 public interface GuestDao {
 
     public void createGuest(GuestDto guestDto) throws Exception;
+
     public void deleteGuest(GuestDto guestDto) throws Exception;
-    public GuestDto existByGuest(UserDto userDto)throws Exception;
-    public  void statusGuest(UserDto userDto,GuestDto guestDto) throws Exception;
+
+    public GuestDto existByGuest(UserDto userDto) throws Exception;
+
+    public void changeStatus(GuestDto guestDto) throws Exception;
+    
+    public GuestDto getGuestById(long guestId) throws Exception;
+
+    public List<GuestDto> statusGuest(PartnerDto partnerDto) throws Exception;
 }
