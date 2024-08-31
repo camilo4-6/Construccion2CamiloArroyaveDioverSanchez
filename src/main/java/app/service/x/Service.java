@@ -4,6 +4,7 @@ import app.Daoo.GuestDaoImplemetation;
 import app.Daoo.PartnerDaoImplemetation;
 import app.Daoo.PersonDaoImplementation;
 import app.Daoo.UserDaoImplementation;
+import app.controllers.Utils;
 import app.dao.interfaces.GuestDao;
 import app.dao.interfaces.InvoiceDao;
 import app.dao.interfaces.InvoiceDetailDao;
@@ -35,6 +36,7 @@ public class Service implements AdminService, LoginService, PartnerService {
     private GuestDao guestDao;
     public static UserDto user;
     public static PersonDto person;
+    private double addFound;
 
     public Service() {
         this.userDao = new UserDaoImplementation();
@@ -148,7 +150,7 @@ public class Service implements AdminService, LoginService, PartnerService {
         this.userDao.updateUserRole(userDto);
         try {
             this.partnerDao.createPartner(partnerDto);
-            System.out.println("Se ha convertido el Guest en Partner exitosamente.");
+            System.out.println("Se ha convertido el Invitado en  exitosamente.");
 
         } catch (SQLException e) {
             System.out.println("El usuario no existe en la base de datos.");
@@ -168,18 +170,55 @@ public class Service implements AdminService, LoginService, PartnerService {
         }
     }
 
-    
-       
-    
-
     @Override
     public GuestDto getGuestById(long guestId) throws Exception {
-       return guestDao.getGuestById(guestId);
+        return guestDao.getGuestById(guestId);
     }
 
     @Override
     public void updateGuestStatus(GuestDto guestDto) throws Exception {
+
         guestDao.changeStatus(guestDto);
+    }
+
+    @Override
+    public void updateMoney() throws Exception {
+        UserDto users = Service.user;
+        PartnerDto partnerDto = partnerDao.existByPartner(users);
+        System.out.println("su tipo es :"+partnerDto.getType());
+        System.out.println("El dinero con el cuenta ahora mismo es:" + partnerDto.getMoney());
+
+        System.out.println("Cuanto desea ingresar : ");
+        double getMoney = Double.parseDouble(Utils.getReader().nextLine());
+
+        addFound = partnerDto.getMoney() + getMoney;
+        if ("regular".equals(partnerDto.getType()) && addFound >= 1000000) {
+
+            System.out.println("No puedes tener mas de 1000000");
+            addFound = partnerDto.getMoney() - getMoney;
+        }
+            
+        
+        if ("vip".equals(partnerDto.getType()) && addFound >= 5000000) {
+            System.out.println("No puedes tener mas de 5000000");
+            addFound = partnerDto.getMoney() - getMoney;
+        }
+            partnerDto.setMoney(addFound);
+            this.partnerDao.getMoneyByPartner(addFound);
+            this.partnerDao.updateMoney(partnerDto);
+        
+    }
+
+    @Override
+    public void typeRegular() throws Exception {
+        UserDto users = Service.user;
+        PartnerDto partnerDto = partnerDao.existByPartner(users);
+
+    }
+
+    @Override
+    public void typeVip() throws Exception {
+
     }
 }
 

@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 
 public class GuestController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para gastar \n 2. Pasar a Socio \n 3. Para cerrar sesion\n";
+    private static final String MENU = "ingrese la opcion que desea ejecutar:  \n 1. Pasar a Socio \n 2. Para cerrar sesion\n";
     private PersonValidator personValidator;
     private UserValidator userValidator;
     private AdminService service;
@@ -56,15 +56,15 @@ public class GuestController implements ControllerInterface {
 
     private boolean options(String option) throws Exception {
         switch (option) {
-            case "1": {
+            case "": {
                 System.out.println("");
                 return true;
             }
-            case "2": {
+            case "1": {
                 this.createPartner();
                 return true;
             }
-            case "3": {
+            case "2": {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }

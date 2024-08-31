@@ -70,4 +70,64 @@ public class PartnerDaoImplemetation implements PartnerDao {
         return null;
     }
 
-}
+
+    @Override
+    public PartnerDto getMoneyByPartner(double getMoney) throws Exception {
+        String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE AMOUNT = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setDouble(1, getMoney);
+        ResultSet resulSet = preparedStatement.executeQuery();
+        if (resulSet.next()) {
+            Partner partner = new Partner();
+            partner.setId(resulSet.getLong("ID"));
+            partner.setMoney(resulSet.getDouble("AMOUNT"));
+            partner.setType(resulSet.getString("TYPE"));
+            partner.setDateCreated(resulSet.getTimestamp("CREATIONDATE"));
+            User user = new User();
+            user.setId(resulSet.getLong("USERID"));
+            partner.setUserId(user);
+            resulSet.close();
+            preparedStatement.close();
+            return Helper.parse(partner);
+        }
+        resulSet.close();
+        preparedStatement.close();
+        return null;
+    }
+
+    @Override
+    public void updateMoney(PartnerDto partnerDto) throws Exception {
+         String query = "UPDATE PARTNER SET AMOUNT = ? WHERE USERID = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setDouble(1, partnerDto.getMoney());
+        preparedStatement.setLong(2, partnerDto.getUserId().getId());
+        preparedStatement.executeUpdate();
+    }
+
+    @Override
+    public PartnerDto getTypeByPartner(PartnerDto partnerDto) throws Exception {
+         String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE TYPE = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setString(1,partnerDto.getType());
+        ResultSet resulSet = preparedStatement.executeQuery();
+        if (resulSet.next()) {
+            Partner partner = new Partner();
+            partner.setId(resulSet.getLong("ID"));
+            partner.setMoney(resulSet.getDouble("AMOUNT"));
+            partner.setType(resulSet.getString("TYPE"));
+            partner.setDateCreated(resulSet.getTimestamp("CREATIONDATE"));
+            User user = new User();
+            user.setId(resulSet.getLong("USERID"));
+            partner.setUserId(user);
+            resulSet.close();
+            preparedStatement.close();
+            return Helper.parse(partner);
+        }
+        resulSet.close();
+        preparedStatement.close();
+        return null;
+    }
+    }
+    
+
+

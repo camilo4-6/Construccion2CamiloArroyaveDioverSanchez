@@ -20,4 +20,9 @@ public interface PartnerDao {
 
     public PartnerDto existByPartner(UserDto userDto) throws Exception;
     
+    public PartnerDto getMoneyByPartner(double getMoney)throws Exception;
+    
+    public void updateMoney(PartnerDto partnerDto)throws Exception;
+    
+     public PartnerDto getTypeByPartner(PartnerDto partnerDto) throws Exception;
 }

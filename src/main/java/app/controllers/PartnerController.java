@@ -32,7 +32,7 @@ import java.sql.SQLException;
 public class PartnerController implements ControllerInterface {
 
     private PartnerValidator partnerValidator;
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado.  \n 2. para mostrar invitados. \n 3. para activar \n 4. para solicitar promocio \n 5. para solicitar baja  \n 6. para cerrar sesion \n ";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agragar fondos. \n 3. para mostrar invitados. \n 4. para activar/descativar invitado. \n 5. para solicitar promocion. \n 6. para solicitar baja.  \n 7. para cerrar sesion \n ";
     private PersonValidator personValidator;
     private GuestValidator guestValidator;
     private UserValidator userValidator;
@@ -80,19 +80,23 @@ public class PartnerController implements ControllerInterface {
                 return true;
             }
             case "2": {
-                this.statusGuest();
+                this.addFouns();
                 return true;
             }
             case "3": {
+                this.statusGuest();
+                return true;
+            }
+            case "4": {
                 this.changeStatus();
                 return true;
             }
-            case "5": {
+            case "6": {
 
                 this.deletePartner();
                 return false;
             }
-            case "6": {
+            case "7": {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
@@ -131,7 +135,7 @@ public class PartnerController implements ControllerInterface {
         guestDto.setStatus("activo");
         System.out.println("se ha creado el usuario exitosamente ");
         this.service.createGuest(guestDto);
-        
+
     }
 
     public void deletePartner() throws Exception {
@@ -140,32 +144,33 @@ public class PartnerController implements ControllerInterface {
     }
 
     public void statusGuest() throws Exception {
-          PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
-           if (partnerDto == null) {
+        PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
+        if (partnerDto == null) {
             System.out.println("No se encontró un socio asociado al usuario.");
             return;
         }
-         service.showGuestsForPartner(partnerDto);
-           
-         
-        
- 
+        service.showGuestsForPartner(partnerDto);
+
     }
-    public void changeStatus()throws Exception{
+
+    public void changeStatus() throws Exception {
         System.out.println("Ingrese el ID del invitado cuyo estado desea cambiar:");
         long guestId = Long.parseLong(Utils.getReader().nextLine());
-        GuestDto guestDto = service.getGuestById(guestId); 
-            if (guestDto == null) {
+        GuestDto guestDto = service.getGuestById(guestId);
+        if (guestDto == null) {
             System.out.println("Invitado no encontrado.");
             return;
         }
-         System.out.println("Ingrese el nuevo estado (activo/inactivo):");
+        System.out.println("Ingrese el nuevo estado (activo/inactivo):");
         String Status = Utils.getReader().nextLine();
-        
-    
+
         guestDto.setStatus(Status);
         service.updateGuestStatus(guestDto);
         System.out.println("Estado del invitado actualizado exitosamente.");
-         
+
+    }
+
+    public void addFouns() throws Exception {
+        this.service.updateMoney();
     }
 }
