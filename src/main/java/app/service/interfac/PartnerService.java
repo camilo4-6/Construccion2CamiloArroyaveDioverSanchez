@@ -24,7 +24,9 @@ public interface PartnerService {
 
     public void checkVipLimit(PartnerDto partnerDto) throws Exception;
 
-    public void typeVip() throws Exception;
+    public void checkGuestLimit(PartnerDto partnerDto) throws Exception;
 
+    public void vipPromocion () throws Exception;
+    
     public void updateMoney() throws Exception;
 }

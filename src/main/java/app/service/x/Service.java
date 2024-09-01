@@ -111,6 +111,7 @@ public class Service implements AdminService, LoginService, PartnerService {
         guestDto.setUserId(userDto);
         PartnerDto partnerDto = partnerDao.existByPartner(user);
         guestDto.setPartnerId(partnerDto);
+        checkGuestLimit(partnerDto);
         try {
             this.guestDao.createGuest(guestDto);
         } catch (SQLException e) {
@@ -221,29 +222,21 @@ public class Service implements AdminService, LoginService, PartnerService {
     }
 
     @Override
-    public void typeVip() throws Exception {
-
+    public void checkGuestLimit(PartnerDto partnerDto) throws Exception {
+        if ("regular".equals(partnerDto.getType())) {
+            int guestCount = this.guestDao.countGuestsByPartnerId(partnerDto.getId());
+            final int guest = 3;
+            if (guestCount>=guest ) {
+                throw new Exception("El numero maximo de invitados a sido alcanzado.");
+            }
+        }
     }
+
+    @Override
+    public void vipPromocion() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
 }
 
-/*private InvoiceDto createOrder(PartnerDto partnerDto) throws Exception {
-        InvoiceDto orderDto = new InvoiceDto();
-        orderDto.setCreationDate(new Date(clinicalHistoryDto.getDate()));
-        orderDto.setId(getId());
-        orderDto.setOwnerId(clinicalHistoryDto.getPetId().getOwnerId());
-        orderDto.setMedicine(clinicalHistoryDto.getMedicine());
-        orderDto.setDose(clinicalHistoryDto.getDose());
-        orderDto.setVeterinarian(clinicalHistoryDto.getVeterinarian());
-        orderDao.createOrder(orderDto);
-        return orderDto;*/
- /*this.createUser(guestDto.getUserId());
-        UserDto userDto = userDao.findByUserName(guestDto.getUserId());
-        guestDto.setUserId(userDto);
-           PartnerDto partnerDto = partnerDao.existByPartner(user);
-        guestDto.setPartnerId(partnerDto);
-       try {
-             guestDao.createGuest(guestDto);
-       } catch (SQLException e) {
-            
-            throw new Exception("error al crear el invitador");
-       }*/
