@@ -70,7 +70,6 @@ public class PartnerDaoImplemetation implements PartnerDao {
         return null;
     }
 
-
     @Override
     public PartnerDto getMoneyByPartner(double getMoney) throws Exception {
         String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE AMOUNT = ?";
@@ -97,7 +96,7 @@ public class PartnerDaoImplemetation implements PartnerDao {
 
     @Override
     public void updateMoney(PartnerDto partnerDto) throws Exception {
-         String query = "UPDATE PARTNER SET AMOUNT = ? WHERE USERID = ?";
+        String query = "UPDATE PARTNER SET AMOUNT = ? WHERE USERID = ?";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
         preparedStatement.setDouble(1, partnerDto.getMoney());
         preparedStatement.setLong(2, partnerDto.getUserId().getId());
@@ -106,9 +105,9 @@ public class PartnerDaoImplemetation implements PartnerDao {
 
     @Override
     public PartnerDto getTypeByPartner(PartnerDto partnerDto) throws Exception {
-         String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE TYPE = ?";
+        String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE TYPE = ?";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setString(1,partnerDto.getType());
+        preparedStatement.setString(1, partnerDto.getType());
         ResultSet resulSet = preparedStatement.executeQuery();
         if (resulSet.next()) {
             Partner partner = new Partner();
@@ -127,20 +126,28 @@ public class PartnerDaoImplemetation implements PartnerDao {
         preparedStatement.close();
         return null;
     }
-     @Override
+
+    @Override
     public int countVipPartners() throws Exception {
-               String query = "SELECT COUNT(*) FROM PARTNER WHERE TYPE = 'vip'";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        int count = 0;
-        if (resultSet.next()) {
-            count = resultSet.getInt(1);
+        String query = "SELECT COUNT(*) FROM PARTNER WHERE TYPE = 'vip'";
+        try (PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query); ResultSet resultSet = preparedStatement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+            return 0;
         }
-        resultSet.close();
+    }
+
+
+@Override
+public void updatePartnerType(PartnerDto partnerDto) throws Exception {
+        String query = "UPDATE PARTNER SET TYPE = ? WHERE ID = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setString(1, partnerDto.getType());
+        preparedStatement.setLong(2, partnerDto.getId());
+        preparedStatement.executeUpdate();
         preparedStatement.close();
-        return count;
     }
+
+   
     }
-    
-
-

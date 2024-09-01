@@ -91,6 +91,10 @@ public class PartnerController implements ControllerInterface {
                 this.changeStatus();
                 return true;
             }
+            case "5": {
+                this. vipPromocion();
+                return true;
+            }
             case "6": {
 
                 this.deletePartner();
@@ -172,5 +176,8 @@ public class PartnerController implements ControllerInterface {
 
     public void addFouns() throws Exception {
         this.service.updateMoney();
+    }
+    public void vipPromocion()throws Exception{
+        this.service.vipPromocion();
     }
 }

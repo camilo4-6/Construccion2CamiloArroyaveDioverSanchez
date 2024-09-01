@@ -19,12 +19,16 @@ public interface PartnerDao {
     public void deletePartner(PartnerDto partnerDto) throws Exception;
 
     public PartnerDto existByPartner(UserDto userDto) throws Exception;
-    
-    public PartnerDto getMoneyByPartner(double getMoney)throws Exception;
-    
-    public void updateMoney(PartnerDto partnerDto)throws Exception;
-    
-     public PartnerDto getTypeByPartner(PartnerDto partnerDto) throws Exception;
-     
-     public int countVipPartners() throws Exception;
+
+    public PartnerDto getMoneyByPartner(double getMoney) throws Exception;
+
+    public void updateMoney(PartnerDto partnerDto) throws Exception;
+
+    public PartnerDto getTypeByPartner(PartnerDto partnerDto) throws Exception;
+
+    public int countVipPartners() throws Exception;
+
+    public void updatePartnerType(PartnerDto partnerDto) throws Exception;
+
+ 
 }

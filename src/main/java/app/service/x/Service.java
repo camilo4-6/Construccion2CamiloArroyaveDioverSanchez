@@ -226,7 +226,7 @@ public class Service implements AdminService, LoginService, PartnerService {
         if ("regular".equals(partnerDto.getType())) {
             int guestCount = this.guestDao.countGuestsByPartnerId(partnerDto.getId());
             final int guest = 3;
-            if (guestCount>=guest ) {
+            if (guestCount >= guest) {
                 throw new Exception("El numero maximo de invitados a sido alcanzado.");
             }
         }
@@ -234,9 +234,16 @@ public class Service implements AdminService, LoginService, PartnerService {
 
     @Override
     public void vipPromocion() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        PartnerDto partnerDto = this.partnerDao.existByPartner(user);
+        checkVipLimit(partnerDto);
+        if ("regular".equals(partnerDto.getType())) {
+            partnerDto.setType("vip");
+            this.partnerDao.updatePartnerType(partnerDto);
+            System.out.println("Tu solicitud de promoción a VIP ha sido procesada.");
+        } else {
+            System.out.println("Ya eres un socio VIP o no eres un socio regular.");
+
+        }
     }
-
-   
 }
-
