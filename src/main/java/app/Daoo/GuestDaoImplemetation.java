@@ -134,4 +134,33 @@ public class GuestDaoImplemetation implements GuestDao {
 
         }
     }
-}
+
+    @Override
+    public List<GuestDto> getGuestsByPartnerId(long partnerId) throws Exception {
+        List<GuestDto> guests = new ArrayList<>();
+        String query = "SELECT ID,USERID,PARTNERID,STATUS FROM GUEST WHERE PARTNERID = ?";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        preparedStatement.setLong(1, partnerId);
+        ResultSet resulSet = preparedStatement.executeQuery();
+        while (resulSet.next()) {
+            Guest guest = new Guest();
+            guest.setId(resulSet.getLong("ID"));
+            guest.setStatus(resulSet.getString("STATUS"));
+            User user = new User();
+            user.setId(resulSet.getLong("USERID"));
+            guest.setUserId(user);
+            Partner partner = new Partner();
+            partner.setId(resulSet.getLong("PARTNERID"));
+            guest.setPartnerId(partner);
+            guests.add(Helper.parse(guest));
+        }
+        resulSet.close();
+        preparedStatement.close();
+        return guests;
+    }
+
+        }
+    
+  
+
+   

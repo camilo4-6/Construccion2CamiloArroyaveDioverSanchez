@@ -95,6 +95,7 @@ public abstract class Helper {
     partnerDto.setId(partner.getId());
     partnerDto.setUserId(parse(partner.getUserId()));
     partnerDto.setMoney(partner.getMoney());
+    partnerDto.setType(partner.getType());
     partnerDto.setDateCreated(partner.getDateCreated());
     return partnerDto;
 }

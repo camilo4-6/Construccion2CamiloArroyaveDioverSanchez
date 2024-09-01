@@ -22,8 +22,10 @@ public interface GuestDao {
     public GuestDto existByGuest(UserDto userDto) throws Exception;
 
     public void changeStatus(GuestDto guestDto) throws Exception;
-    
+
     public GuestDto getGuestById(long guestId) throws Exception;
 
     public List<GuestDto> statusGuest(PartnerDto partnerDto) throws Exception;
+
+    public List<GuestDto> getGuestsByPartnerId(long partnerId) throws Exception;
 }

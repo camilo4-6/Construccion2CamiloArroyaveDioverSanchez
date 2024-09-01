@@ -96,7 +96,6 @@ public class Service implements AdminService, LoginService, PartnerService {
         UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
         partnerDto.setUserId(userDto);
         try {
-            Partner partner = Helper.parse(partnerDto);
             this.partnerDao.createPartner(partnerDto);
         } catch (SQLException e) {
             this.userDao.deleteUser(userDto);
@@ -124,11 +123,11 @@ public class Service implements AdminService, LoginService, PartnerService {
     public void deletePartner() throws Exception {
         UserDto users = Service.user;
         try {
+
             PartnerDto partnerDto = this.partnerDao.existByPartner(users);
             UserDto userDto = this.userDao.findByUserName(users);
-            this.userDao.existsByUserName(userDto);
-
             this.partnerDao.deletePartner(partnerDto);
+            this.userDao.deleteUser(userDto);
             this.userDao.deleteUser(userDto);
             this.personDao.deletePerson(userDto.getPersonId());
             System.out.println("Su cuenta ha sido eliminada exitosamente.");
@@ -185,28 +184,27 @@ public class Service implements AdminService, LoginService, PartnerService {
     public void updateMoney() throws Exception {
         UserDto users = Service.user;
         PartnerDto partnerDto = partnerDao.existByPartner(users);
-        System.out.println("su tipo es :"+partnerDto.getType());
+        System.out.println("su tipo es :" + partnerDto.getType());
+        System.out.println("su tipo es :" + users.getUserName());
         System.out.println("El dinero con el cuenta ahora mismo es:" + partnerDto.getMoney());
-
         System.out.println("Cuanto desea ingresar : ");
         double getMoney = Double.parseDouble(Utils.getReader().nextLine());
-
         addFound = partnerDto.getMoney() + getMoney;
         if ("regular".equals(partnerDto.getType()) && addFound >= 1000000) {
 
             System.out.println("No puedes tener mas de 1000000");
-            addFound = partnerDto.getMoney() - getMoney;
+            addFound = addFound - getMoney;
+
         }
-            
-        
+
         if ("vip".equals(partnerDto.getType()) && addFound >= 5000000) {
             System.out.println("No puedes tener mas de 5000000");
-            addFound = partnerDto.getMoney() - getMoney;
+            addFound = addFound - getMoney;
         }
-            partnerDto.setMoney(addFound);
-            this.partnerDao.getMoneyByPartner(addFound);
-            this.partnerDao.updateMoney(partnerDto);
-        
+        partnerDto.setMoney(addFound);
+        this.partnerDao.getMoneyByPartner(addFound);
+        this.partnerDao.updateMoney(partnerDto);
+
     }
 
     @Override
