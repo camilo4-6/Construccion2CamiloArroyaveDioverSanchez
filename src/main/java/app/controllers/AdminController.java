@@ -74,7 +74,7 @@ public class AdminController implements ControllerInterface {
                 return false;
             }
             case "4": {
-               
+
             }
             default: {
                 System.out.println("ingrese una opcion valida");
@@ -89,8 +89,7 @@ public class AdminController implements ControllerInterface {
         personValidator.validName(name);
         System.out.println("ingrese la cedula");
         long document = personValidator.validDocument(Utils.getReader().nextLine());
-        System.out.println("ingrese el numero de celular");
-        long celPhone = personValidator.validPhone(Utils.getReader().nextLine());
+        long celPhone = ValidPhoneNumber();
         System.out.println("ingrese el usuario del socio");
         String userName = Utils.getReader().nextLine();
         userValidator.validUserName(userName);
@@ -111,12 +110,23 @@ public class AdminController implements ControllerInterface {
         partnerDto.setMoney(50000);
         partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
         partnerDto.setType("regular");
-
         this.service.createPartner(partnerDto);
         System.out.println("se ha creado el usuario exitosamente ");
         System.out.println("Tipo de socio: " + partnerDto.getType());
         System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
         System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
+    }
+
+    private long ValidPhoneNumber() throws NumberFormatException {
+        while (true) {
+            System.out.println("Ingrese el número de celular (mínimo 10 dígitos):");
+            String cellPhoneInput = Utils.getReader().nextLine();
+            if (cellPhoneInput.matches("\\d{10,}")) { // Verifica que el input tenga al menos 10 dígitos
+                return Long.parseLong(cellPhoneInput);
+            } else {
+                System.out.println("El número de celular debe tener al menos 10 dígitos. Inténtelo nuevamente.");
+            }
+        }
     }
 
 }

@@ -43,7 +43,7 @@ public class GuestController implements ControllerInterface {
     private boolean menu() {
         try {
             System.out.println("bienvenido " + Service.user.getUserName());
-            
+
             System.out.print(MENU);
             String option = Utils.getReader().nextLine();
             return options(option);
@@ -84,7 +84,7 @@ public class GuestController implements ControllerInterface {
         partnerDto.setMoney(50000);
         partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
         partnerDto.setType("regular");
-        
+
         System.out.println("se ha creado el usuario exitosamente ");
         System.out.println("Tipo de socio: " + partnerDto.getType());
         System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
@@ -93,7 +93,6 @@ public class GuestController implements ControllerInterface {
     }
 
     public void deleteGuest() throws Exception {
-       
 
     }
 }

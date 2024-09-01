@@ -32,7 +32,7 @@ public class PersonDaoImplementation implements PersonDao {
 
     @Override
     public void createPerson(PersonDto personDto) throws Exception {
-      
+
         Person person = Helper.parse(personDto);
         String query = "INSERT INTO PERSON(NAME,DOCUMENT,CELLPHONE) VALUES (?,?,?) ";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);

@@ -84,13 +84,10 @@ public class UserDaoImplementation implements UserDao {
     @Override
     public void updateUserRole(UserDto userDto) throws Exception {
         String query = "UPDATE USER SET ROLE = ? WHERE USERNAME = ?";
-   
-         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
         preparedStatement.setString(1, userDto.getRole());
         preparedStatement.setString(2, userDto.getUserName());
         preparedStatement.executeUpdate();
     }
 }
-    
-
-

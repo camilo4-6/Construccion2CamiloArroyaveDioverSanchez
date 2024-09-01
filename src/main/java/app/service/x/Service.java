@@ -111,7 +111,7 @@ public class Service implements AdminService, LoginService, PartnerService {
         guestDto.setUserId(userDto);
         PartnerDto partnerDto = partnerDao.existByPartner(user);
         guestDto.setPartnerId(partnerDto);
-        
+
         try {
             this.guestDao.createGuest(guestDto);
         } catch (SQLException e) {
@@ -179,7 +179,7 @@ public class Service implements AdminService, LoginService, PartnerService {
 
     @Override
     public void updateGuestStatus(GuestDto guestDto) throws Exception {
-        
+
         guestDao.changeStatus(guestDto);
     }
 
@@ -251,10 +251,11 @@ public class Service implements AdminService, LoginService, PartnerService {
             System.out.println("Ya eres un socio VIP o no eres un socio regular.");
 
         }
-        
+
     }
+
     @Override
-   public int countActiveGuestsByPartner(long partnerId) throws Exception {
-       return guestDao. countGuestsByPartnerId(partnerId);
-   }
+    public int countActiveGuestsByPartner(long partnerId) throws Exception {
+        return guestDao.countGuestsByPartnerId(partnerId);
+    }
 }

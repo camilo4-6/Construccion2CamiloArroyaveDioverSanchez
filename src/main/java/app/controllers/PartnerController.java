@@ -93,7 +93,7 @@ public class PartnerController implements ControllerInterface {
                 return true;
             }
             case "5": {
-                this. vipPromocion();
+                this.vipPromocion();
                 return true;
             }
             case "6": {
@@ -118,8 +118,7 @@ public class PartnerController implements ControllerInterface {
         personValidator.validName(name);
         System.out.println("ingrese la cedula");
         long document = personValidator.validDocument(Utils.getReader().nextLine());
-        System.out.println("ingrese el numero de celular");
-        long celPhone = personValidator.validPhone(Utils.getReader().nextLine());
+        long celPhone = ValidPhoneNumber();
         System.out.println("ingrese el usuario del invitado");
         String userName = Utils.getReader().nextLine();
         userValidator.validUserName(userName);
@@ -140,7 +139,18 @@ public class PartnerController implements ControllerInterface {
         guestDto.setStatus("inactivo");
         System.out.println("se ha creado el usuario exitosamente ");
         this.service.createGuest(guestDto);
+    }
 
+    private long ValidPhoneNumber() throws NumberFormatException {
+        while (true) {
+            System.out.println("Ingrese el número de celular (mínimo 10 dígitos):");
+            String cellPhoneInput = Utils.getReader().nextLine();
+            if (cellPhoneInput.matches("\\d{10,}")) { // Verifica que el input tenga al menos 10 dígitos
+                return Long.parseLong(cellPhoneInput);
+            } else {
+                System.out.println("El número de celular debe tener al menos 10 dígitos. Inténtelo nuevamente.");
+            }
+        }
     }
 
     public void deletePartner() throws Exception {
@@ -159,28 +169,27 @@ public class PartnerController implements ControllerInterface {
     }
 
     public void changeStatus() throws Exception {
-        
-         PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
+
+        PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
         System.out.println("Ingrese el ID del invitado cuyo estado desea cambiar:");
         long guestId = Long.parseLong(Utils.getReader().nextLine());
         GuestDto guestDto = service.getGuestById(guestId);
-       
+
         System.out.println("Ingrese el nuevo estado (activo/inactivo):");
         String Status = Utils.getReader().nextLine();
         guestDto.setStatus(Status);
-        
-        
 
         service.updateGuestStatus(guestDto);
         System.out.println("Estado del invitado actualizado exitosamente.");
         service.checkGuestLimit(partnerDto);
     }
-    
 
     public void addFouns() throws Exception {
         this.service.updateMoney();
     }
-    public void vipPromocion()throws Exception{
+
+    public void vipPromocion() throws Exception {
         this.service.vipPromocion();
     }
+
 }

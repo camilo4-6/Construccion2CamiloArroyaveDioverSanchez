@@ -30,5 +30,4 @@ public interface PartnerDao {
 
     public void updatePartnerType(PartnerDto partnerDto) throws Exception;
 
- 
 }
