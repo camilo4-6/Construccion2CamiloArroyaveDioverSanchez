@@ -168,20 +168,14 @@ public class PartnerController implements ControllerInterface {
         System.out.println("Ingrese el nuevo estado (activo/inactivo):");
         String Status = Utils.getReader().nextLine();
         guestDto.setStatus(Status);
-        if ("activo".equals(Status)) {
-         int activeGuests =service.countActiveGuestsByPartner(partnerDto.getId());
-        final int guest = 3;
-         if (activeGuests >= guest && !"activo".equals(partnerDto)) {
-            System.out.println("No se puede agregar más invitados activos. Debe cambiar el estado de uno de los invitados existentes a 'inactivo' primero.");
-            return;
-        }
         
         
+
         service.updateGuestStatus(guestDto);
         System.out.println("Estado del invitado actualizado exitosamente.");
         service.checkGuestLimit(partnerDto);
     }
-    }
+    
 
     public void addFouns() throws Exception {
         this.service.updateMoney();
