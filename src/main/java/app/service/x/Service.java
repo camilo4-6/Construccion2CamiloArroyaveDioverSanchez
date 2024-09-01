@@ -111,7 +111,7 @@ public class Service implements AdminService, LoginService, PartnerService {
         guestDto.setUserId(userDto);
         PartnerDto partnerDto = partnerDao.existByPartner(user);
         guestDto.setPartnerId(partnerDto);
-        checkGuestLimit(partnerDto);
+        
         try {
             this.guestDao.createGuest(guestDto);
         } catch (SQLException e) {
@@ -179,7 +179,7 @@ public class Service implements AdminService, LoginService, PartnerService {
 
     @Override
     public void updateGuestStatus(GuestDto guestDto) throws Exception {
-
+        
         guestDao.changeStatus(guestDto);
     }
 
@@ -188,7 +188,6 @@ public class Service implements AdminService, LoginService, PartnerService {
         UserDto users = Service.user;
         PartnerDto partnerDto = partnerDao.existByPartner(users);
         System.out.println("su tipo es :" + partnerDto.getType());
-        System.out.println("su tipo es :" + users.getUserName());
         System.out.println("El dinero con el cuenta ahora mismo es:" + partnerDto.getMoney());
         System.out.println("Cuanto desea ingresar : ");
         double getMoney = Double.parseDouble(Utils.getReader().nextLine());
@@ -238,6 +237,13 @@ public class Service implements AdminService, LoginService, PartnerService {
         PartnerDto partnerDto = this.partnerDao.existByPartner(user);
         checkVipLimit(partnerDto);
         if ("regular".equals(partnerDto.getType())) {
+
+            int vipCount = partnerDao.countVipPartners();
+            final int vip = 5;
+            partnerDto.setType("vip");
+            if (vipCount >= vip) {
+                throw new Exception("El número máximo de socios VIP ya ha sido alcanzado.");
+            }
             partnerDto.setType("vip");
             this.partnerDao.updatePartnerType(partnerDto);
             System.out.println("Tu solicitud de promoción a VIP ha sido procesada.");
@@ -245,5 +251,10 @@ public class Service implements AdminService, LoginService, PartnerService {
             System.out.println("Ya eres un socio VIP o no eres un socio regular.");
 
         }
+        
     }
+    @Override
+   public int countActiveGuestsByPartner(long partnerId) throws Exception {
+       return guestDao. countGuestsByPartnerId(partnerId);
+   }
 }

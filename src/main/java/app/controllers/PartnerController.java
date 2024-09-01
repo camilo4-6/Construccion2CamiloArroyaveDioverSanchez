@@ -40,6 +40,7 @@ public class PartnerController implements ControllerInterface {
     private PartnerDao partnerDao;
     private PersonDao personDao;
     private UserDao userDao;
+    private GuestDao guestDao;
 
     public PartnerController() {
         this.partnerValidator = new PartnerValidator();
@@ -136,7 +137,7 @@ public class PartnerController implements ControllerInterface {
         userDto.setRole("guest");
         GuestDto guestDto = new GuestDto();
         guestDto.setUserId(userDto);
-        guestDto.setStatus("activo");
+        guestDto.setStatus("inactivo");
         System.out.println("se ha creado el usuario exitosamente ");
         this.service.createGuest(guestDto);
 
@@ -158,20 +159,28 @@ public class PartnerController implements ControllerInterface {
     }
 
     public void changeStatus() throws Exception {
+        
+         PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
         System.out.println("Ingrese el ID del invitado cuyo estado desea cambiar:");
         long guestId = Long.parseLong(Utils.getReader().nextLine());
         GuestDto guestDto = service.getGuestById(guestId);
-        if (guestDto == null) {
-            System.out.println("Invitado no encontrado.");
-            return;
-        }
+       
         System.out.println("Ingrese el nuevo estado (activo/inactivo):");
         String Status = Utils.getReader().nextLine();
-
         guestDto.setStatus(Status);
+        if ("activo".equals(Status)) {
+         int activeGuests =service.countActiveGuestsByPartner(partnerDto.getId());
+        final int guest = 3;
+         if (activeGuests >= guest && !"activo".equals(partnerDto)) {
+            System.out.println("No se puede agregar más invitados activos. Debe cambiar el estado de uno de los invitados existentes a 'inactivo' primero.");
+            return;
+        }
+        
+        
         service.updateGuestStatus(guestDto);
         System.out.println("Estado del invitado actualizado exitosamente.");
-
+        service.checkGuestLimit(partnerDto);
+    }
     }
 
     public void addFouns() throws Exception {

@@ -28,5 +28,7 @@ public interface PartnerService {
 
     public void vipPromocion () throws Exception;
     
+    public int countActiveGuestsByPartner(long partnerId) throws Exception;
+    
     public void updateMoney() throws Exception;
 }
