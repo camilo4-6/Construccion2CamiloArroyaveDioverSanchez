@@ -92,6 +92,7 @@ public class Service implements AdminService, LoginService, PartnerService {
 
     @Override
     public void createPartner(PartnerDto partnerDto) throws Exception {
+        checkVipLimit(partnerDto);
         this.createUser(partnerDto.getUserId());
         UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
         partnerDto.setUserId(userDto);
@@ -121,6 +122,7 @@ public class Service implements AdminService, LoginService, PartnerService {
 
     @Override
     public void deletePartner() throws Exception {
+
         UserDto users = Service.user;
         try {
 
@@ -128,7 +130,7 @@ public class Service implements AdminService, LoginService, PartnerService {
             UserDto userDto = this.userDao.findByUserName(users);
             this.partnerDao.deletePartner(partnerDto);
             this.userDao.deleteUser(userDto);
-            this.userDao.deleteUser(userDto);
+
             this.personDao.deletePerson(userDto.getPersonId());
             System.out.println("Su cuenta ha sido eliminada exitosamente.");
             this.logout();
@@ -208,10 +210,14 @@ public class Service implements AdminService, LoginService, PartnerService {
     }
 
     @Override
-    public void typeRegular() throws Exception {
-        UserDto users = Service.user;
-        PartnerDto partnerDto = partnerDao.existByPartner(users);
-
+    public void checkVipLimit(PartnerDto partnerDto) throws Exception {
+        if ("vip".equals(partnerDto.getType())) {
+            int vipCount = this.partnerDao.countVipPartners();
+            final int vip = 5;
+            if (vipCount >= vip) {
+                throw new Exception("El número máximo de socios VIP ya ha sido alcanzado.");
+            }
+        }
     }
 
     @Override

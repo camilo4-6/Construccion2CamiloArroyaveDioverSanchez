@@ -25,4 +25,6 @@ public interface PartnerDao {
     public void updateMoney(PartnerDto partnerDto)throws Exception;
     
      public PartnerDto getTypeByPartner(PartnerDto partnerDto) throws Exception;
+     
+     public int countVipPartners() throws Exception;
 }

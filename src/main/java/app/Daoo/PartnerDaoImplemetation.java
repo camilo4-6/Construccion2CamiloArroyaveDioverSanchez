@@ -127,6 +127,19 @@ public class PartnerDaoImplemetation implements PartnerDao {
         preparedStatement.close();
         return null;
     }
+     @Override
+    public int countVipPartners() throws Exception {
+               String query = "SELECT COUNT(*) FROM PARTNER WHERE TYPE = 'vip'";
+        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        int count = 0;
+        if (resultSet.next()) {
+            count = resultSet.getInt(1);
+        }
+        resultSet.close();
+        preparedStatement.close();
+        return count;
+    }
     }
     
 

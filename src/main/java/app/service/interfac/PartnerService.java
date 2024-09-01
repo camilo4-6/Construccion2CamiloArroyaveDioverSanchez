@@ -22,7 +22,7 @@ public interface PartnerService {
 
     public void updateGuestStatus(GuestDto guestDto) throws Exception;
 
-    public void typeRegular() throws Exception;
+    public void checkVipLimit(PartnerDto partnerDto) throws Exception;
 
     public void typeVip() throws Exception;
 
