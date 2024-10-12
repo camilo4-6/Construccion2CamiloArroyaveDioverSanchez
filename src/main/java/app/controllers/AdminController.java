@@ -79,16 +79,9 @@ public class AdminController implements ControllerInterface {
             }
             case "3": {
                 System.out.println("se ha cerrado sesion");
-                return true;
-            }
-            case "4": {
-                System.out.println("se ha cerrado sesion");
                 return false;
             }
-            case "5": {
-                System.out.println("se ha cerrado sesion");
-                return false;
-            }
+           
             default: {
                 System.out.println("ingrese una opcion valida");
                 return true;
