@@ -4,15 +4,21 @@
  */
 package app.controller.validator;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author Camilo
  */
+@Component
+@Getter
+@Setter
+@NoArgsConstructor
 public class PartnerValidator extends CommonsValidator {
 
-    public PartnerValidator() {
-        super();
-    }
 
     public double validMoney(String money) throws Exception {
         return super.isValidDouble("El valor ingresado", money);

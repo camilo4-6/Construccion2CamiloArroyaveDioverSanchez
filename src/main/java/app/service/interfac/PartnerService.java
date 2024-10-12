@@ -5,6 +5,7 @@
 package app.service.interfac;
 
 import app.dto.GuestDto;
+import app.dto.InvoiceDto;
 import app.dto.PartnerDto;
 import app.dto.UserDto;
 
@@ -31,4 +32,14 @@ public interface PartnerService {
     public int countActiveGuestsByPartner(long partnerId) throws Exception;
     
     public void updateMoney() throws Exception;
+     
+    public void createInvoice() throws Exception;
+    
+    public void payInvoice() throws Exception;
+    
+    public void showInvoiceForPartner() throws  Exception;
+    
+    public void showInvoiceForAdmin() throws Exception;
+    
+    public void guestInvoice()throws Exception;
 }

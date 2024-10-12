@@ -9,48 +9,67 @@ import app.Daoo.PartnerDaoImplemetation;
 import app.Daoo.PersonDaoImplementation;
 import app.Daoo.UserDaoImplementation;
 import app.controller.validator.GuestValidator;
+import app.controller.validator.InvoiceValidator;
 import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
 import app.dao.interfaces.GuestDao;
+import app.dao.interfaces.InvoiceDao;
 import app.dao.interfaces.PartnerDao;
 import app.dao.interfaces.PersonDao;
 import app.dao.interfaces.UserDao;
 import app.dto.GuestDto;
+import app.dto.InvoiceDetailDto;
+import app.dto.InvoiceDto;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Partner;
 import app.service.interfac.PartnerService;
-import app.service.x.Service;
+import app.service.x.ServiceClub;
+import static app.service.x.ServiceClub.user;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  *
  * @author Camilo
  */
+@Controller
+@Getter
+@Setter
+@NoArgsConstructor
 public class PartnerController implements ControllerInterface {
 
+    @Autowired
     private PartnerValidator partnerValidator;
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agragar fondos. \n 3. para mostrar invitados. \n 4. para activar/descativar invitado. \n 5. para solicitar promocion. \n 6. para solicitar baja.  \n 7. para cerrar sesion \n ";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. para crear invitado. \n 2. para agragar fondos. \n 3. para mostrar invitados. \n 4. para activar/descativar invitado. \n 5. para solicitar promocion. \n 6. para solicitar baja.  \n 7. para crear factura \n 8. para ver facturas \n 9. para pagar factura  \n 10.para cerrar sesion \n";
+    @Autowired
     private PersonValidator personValidator;
+    @Autowired
     private GuestValidator guestValidator;
+    @Autowired
     private UserValidator userValidator;
+    @Autowired
     private PartnerService service;
+    @Autowired
     private PartnerDao partnerDao;
+    @Autowired
     private PersonDao personDao;
+    @Autowired
     private UserDao userDao;
+    @Autowired
     private GuestDao guestDao;
-
-    public PartnerController() {
-        this.partnerValidator = new PartnerValidator();
-        this.personValidator = new PersonValidator();
-        this.userValidator = new UserValidator();
-        this.service = new Service();
-        this.partnerDao = new PartnerDaoImplemetation();
-        this.personDao = new PersonDaoImplementation();
-        this.userDao = new UserDaoImplementation();
-    }
+    @Autowired
+    private InvoiceValidator invoiceValidator;
+    @Autowired
+    private InvoiceDao invoiceDao;
 
     @Override
     public void session() throws Exception {
@@ -63,7 +82,7 @@ public class PartnerController implements ControllerInterface {
 
     private boolean partnerSession() {
         try {
-            System.out.println("bienvenido " + Service.user.getUserName());
+            System.out.println("bienvenido " + ServiceClub.user.getUserName());
             System.out.print(MENU);
             String option = Utils.getReader().nextLine();
             return options(option);
@@ -102,6 +121,19 @@ public class PartnerController implements ControllerInterface {
                 return false;
             }
             case "7": {
+                this.createVoice();
+                return true;
+            }
+            case "8": {
+                this.statusInvoice();
+                return true;
+            }
+            case "9": {
+                this.payVoice();
+                return true;
+            }
+
+            case "10": {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
@@ -159,7 +191,7 @@ public class PartnerController implements ControllerInterface {
     }
 
     public void statusGuest() throws Exception {
-        PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
+        PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
         if (partnerDto == null) {
             System.out.println("No se encontró un socio asociado al usuario.");
             return;
@@ -170,7 +202,7 @@ public class PartnerController implements ControllerInterface {
 
     public void changeStatus() throws Exception {
 
-        PartnerDto partnerDto = partnerDao.existByPartner(Service.user);
+        PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
         System.out.println("Ingrese el ID del invitado cuyo estado desea cambiar:");
         long guestId = Long.parseLong(Utils.getReader().nextLine());
         GuestDto guestDto = service.getGuestById(guestId);
@@ -192,4 +224,20 @@ public class PartnerController implements ControllerInterface {
         this.service.vipPromocion();
     }
 
-}
+    public void createVoice() throws Exception {
+        this.service.createInvoice();
+    }
+
+    public void statusInvoice() throws Exception {
+        this.service.showInvoiceForPartner();
+        
+    }
+    public void payVoice() throws Exception {
+      
+        this.service.payInvoice();
+        
+    }
+    }
+
+ 
+

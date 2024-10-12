@@ -7,27 +7,30 @@ package app.controllers;
 import app.controller.validator.UserValidator;
 import app.dto.UserDto;
 import app.service.interfac.LoginService;
-import app.service.x.Service;
+import app.service.x.ServiceClub;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  *
  * @author Camilo
  */
+@Controller
+@Getter
+@Setter
 public class LoginController implements ControllerInterface {
-
+    
+    @Autowired
     private UserValidator userValidator;
+    @Autowired
     private LoginService service;
     private static final String MENU = "ingrese la opcion que desea: \n 1. para iniciar sesion. \n 2. para detener la ejecucion.";
     private Map<String, ControllerInterface> role;
-
-    public LoginController() {
-        this.userValidator = new UserValidator();
-        this.service = new Service();
-        ControllerInterface adminController = new AdminController();
-        ControllerInterface partnerController = new PartnerController();
-        ControllerInterface guestController = new GuestController();
+    public LoginController(AdminController adminController, PartnerController partnerController, GuestController guestController) {
         this.role = new HashMap<String, ControllerInterface>();
         role.put("admin", adminController);
         role.put("partner", partnerController);

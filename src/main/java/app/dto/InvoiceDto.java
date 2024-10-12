@@ -4,16 +4,17 @@
  */
 package app.dto;
 
-import java.util.Date;
+import java.sql.Timestamp;
+
 
 public class InvoiceDto {
 
     private long id;
     private PersonDto personId;
     private PartnerDto partnerId;
-    private Date creationDate;
+    private Timestamp dateCreated;
     private double amount;
-    private boolean Status;
+    private String Status;
 
     public InvoiceDto() {
     }
@@ -42,13 +43,15 @@ public class InvoiceDto {
         this.partnerId = partnerId;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Timestamp getDateCreated() {
+        return dateCreated;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setDateCreated(Timestamp dateCreated) {
+        this.dateCreated = dateCreated;
     }
+
+   
 
     public double getAmount() {
         return amount;
@@ -58,12 +61,13 @@ public class InvoiceDto {
         this.amount = amount;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return Status;
     }
 
-    public void setStatus(boolean Status) {
+    public void setStatus(String Status) {
         this.Status = Status;
     }
 
+  
 }

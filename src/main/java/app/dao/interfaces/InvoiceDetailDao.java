@@ -4,10 +4,13 @@
  */
 package app.dao.interfaces;
 
+import app.dto.InvoiceDetailDto;
+import app.model.InvoiceDetail;
+
 /**
  *
  * @author Camilo
  */
 public interface InvoiceDetailDao {
-
+  public void createInvoiceDetail(InvoiceDetail invoiceDetail)throws Exception;
 }

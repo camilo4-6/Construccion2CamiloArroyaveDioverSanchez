@@ -4,11 +4,18 @@
  */
 package app.controller.validator;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
+
+@Component
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserValidator extends CommonsValidator {
 
-    public UserValidator() {
-        super();
-    }
+  
 
     public void validUserName(String userName) throws Exception {
         super.isValidString("el nombre de usuario ", userName);

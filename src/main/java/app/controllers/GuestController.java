@@ -12,26 +12,33 @@ import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.service.interfac.AdminService;
 import app.service.interfac.PartnerService;
-import app.service.x.Service;
+import app.service.x.ServiceClub;
 import java.sql.Timestamp;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+@Controller
+@Getter
+@Setter
+@NoArgsConstructor
 public class GuestController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar:  \n 1. Pasar a Socio \n 2. Para cerrar sesion\n";
+    private static final String MENU = "ingrese la opcion que desea ejecutar:  \n 1. Pasar a Socio \n 2. Para crear factura (No me dio el metodo profe) \n 3. Para cerrar sesion \n";
+    @Autowired
     private PersonValidator personValidator;
+    @Autowired
     private UserValidator userValidator;
+    @Autowired
     private AdminService service;
+    @Autowired
     private PartnerService servic;
+    @Autowired
     private PartnerValidator partnerValidator;
 
-    public GuestController() {
-        this.personValidator = new PersonValidator();
-        this.userValidator = new UserValidator();
-        this.service = new Service();
-        this.partnerValidator = new PartnerValidator();
-        this.servic = new Service();
-    }
-
+  
     @Override
     public void session() throws Exception {
         boolean session = true;
@@ -42,7 +49,7 @@ public class GuestController implements ControllerInterface {
 
     private boolean menu() {
         try {
-            System.out.println("bienvenido " + Service.user.getUserName());
+            System.out.println("bienvenido " + ServiceClub.user.getUserName());
 
             System.out.print(MENU);
             String option = Utils.getReader().nextLine();
@@ -65,6 +72,10 @@ public class GuestController implements ControllerInterface {
                 return true;
             }
             case "2": {
+                this.guestInvoice();
+                return true;
+            }
+            case "3": {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
@@ -77,7 +88,7 @@ public class GuestController implements ControllerInterface {
     }
 
     public void createPartner() throws Exception {
-        UserDto userDto = Service.user;
+        UserDto userDto = ServiceClub.user;
         userDto.setRole("partner");
         PartnerDto partnerDto = new PartnerDto();
         partnerDto.setUserId(userDto);
@@ -92,7 +103,8 @@ public class GuestController implements ControllerInterface {
         this.servic.changeRol(partnerDto);
     }
 
-    public void deleteGuest() throws Exception {
-
+    public void guestInvoice() throws Exception {
+    this.servic.guestInvoice();
     }
+    
 }

@@ -11,7 +11,7 @@ package app.dto;
 public class InvoiceDetailDto {
 
     private long id;
-    private InvoiceDto invoice;
+    private InvoiceDto invoiceId;
     private int item;
     private String description;
     private double amount;
@@ -27,13 +27,15 @@ public class InvoiceDetailDto {
         this.id = id;
     }
 
-    public InvoiceDto getInvoice() {
-        return invoice;
+    public InvoiceDto getInvoiceId() {
+        return invoiceId;
     }
 
-    public void setInvoice(InvoiceDto invoice) {
-        this.invoice = invoice;
+    public void setInvoiceId(InvoiceDto invoiceId) {
+        this.invoiceId = invoiceId;
     }
+
+   
 
     public int getItem() {
         return item;

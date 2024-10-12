@@ -13,29 +13,37 @@ import app.dto.PersonDto;
 import app.dto.UserDto;
 import app.model.Invoice;
 import app.service.interfac.AdminService;
-import app.service.x.Service;
+import app.service.interfac.PartnerService;
+import app.service.x.ServiceClub;
 import java.sql.Date;
 import java.sql.Timestamp;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 /**
  *
  * @author Camilo
  */
+@Controller
+@Getter
+@Setter
+@NoArgsConstructor
 public class AdminController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Para cerrar sesion\n";
+    private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Para ver lista de facturas \n 3. Para cerrar sesion\n";
+    @Autowired
     private PersonValidator personValidator;
+    @Autowired
     private UserValidator userValidator;
+    @Autowired
     private AdminService service;
+    @Autowired
     private PartnerValidator partnerValidator;
-
-    public AdminController() {
-        this.personValidator = new PersonValidator();
-        this.userValidator = new UserValidator();
-        this.service = new Service();
-        this.partnerValidator = new PartnerValidator();
-
-    }
+    @Autowired
+    private PartnerService services;
 
     @Override
     public void session() throws Exception {
@@ -48,7 +56,7 @@ public class AdminController implements ControllerInterface {
 
     private boolean menu() {
         try {
-            System.out.println("bienvenido " + Service.user.getUserName());
+            System.out.println("bienvenido " + ServiceClub.user.getUserName());
             System.out.print(MENU);
             String option = Utils.getReader().nextLine();
             return options(option);
@@ -66,15 +74,20 @@ public class AdminController implements ControllerInterface {
                 return true;
             }
             case "2": {
-                System.out.println("se ha cerrado sesion");
-                return false;
+                this.showInvoiceForAdmin();
+                return true;
             }
             case "3": {
                 System.out.println("se ha cerrado sesion");
-                return false;
+                return true;
             }
             case "4": {
-
+                System.out.println("se ha cerrado sesion");
+                return false;
+            }
+            case "5": {
+                System.out.println("se ha cerrado sesion");
+                return false;
             }
             default: {
                 System.out.println("ingrese una opcion valida");
@@ -127,6 +140,10 @@ public class AdminController implements ControllerInterface {
                 System.out.println("El número de celular debe tener al menos 10 dígitos. Inténtelo nuevamente.");
             }
         }
+    }
+
+    private void showInvoiceForAdmin() throws Exception {
+        this.services.showInvoiceForAdmin();
     }
 
 }

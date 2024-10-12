@@ -6,6 +6,7 @@ package app.Daoo;
 
 import app.config.MYSQLConnection;
 import app.dao.interfaces.PartnerDao;
+import app.dao.repositores.PartnerRepository;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
 
@@ -13,118 +14,64 @@ import app.dto.UserDto;
 import app.helpers.Helper;
 import app.model.Partner;
 import app.model.User;
+import jakarta.transaction.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Camilo
  */
+@Service
+@NoArgsConstructor
+@Getter
+@Setter
 public class PartnerDaoImplemetation implements PartnerDao {
+
+    @Autowired
+    PartnerRepository partnerRepository;
 
     @Override
     public void createPartner(PartnerDto partnerDto) throws Exception {
         Partner partner = Helper.parse(partnerDto);
-        String query = "INSERT INTO PARTNER(USERID,AMOUNT,TYPE,CREATIONDATE) VALUES (?, ?,?,?)";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setLong(1, partner.getUserId().getId());
-        preparedStatement.setDouble(2, partner.getMoney());
-        preparedStatement.setString(3, partner.getType());
-        preparedStatement.setTimestamp(4, partner.getDateCreated());
-        preparedStatement.execute();
-        preparedStatement.close();
+        partnerRepository.save(partner);
     }
 
     @Override
     public void deletePartner(PartnerDto partnerDto) throws Exception {
         Partner partner = Helper.parse(partnerDto);
-        String query = "DELETE FROM PARTNER WHERE USERID = ?";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setLong(1, partner.getUserId().getId());
-        preparedStatement.execute();
-        preparedStatement.close();
+        partnerRepository.delete(partner);
 
     }
 
     @Override
     public PartnerDto existByPartner(UserDto userDto) throws Exception {
-        String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE USERID = ?";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setLong(1, userDto.getId());
-        ResultSet resulSet = preparedStatement.executeQuery();
-        if (resulSet.next()) {
-            Partner partner = new Partner();
-            partner.setId(resulSet.getLong("ID"));
-            partner.setMoney(resulSet.getDouble("AMOUNT"));
-            partner.setType(resulSet.getString("TYPE"));
-            partner.setDateCreated(resulSet.getTimestamp("CREATIONDATE"));
-            User user = new User();
-            user.setId(resulSet.getLong("USERID"));
-            partner.setUserId(user);
-            resulSet.close();
-            preparedStatement.close();
-            return Helper.parse(partner);
-        }
-        resulSet.close();
-        preparedStatement.close();
-        return null;
+        Partner partner = partnerRepository.findByUserId_Id(userDto.getId());
+        return Helper.parse(partner);
     }
 
     @Override
-    public PartnerDto getMoneyByPartner(double getMoney) throws Exception {
-        String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE AMOUNT = ?";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setDouble(1, getMoney);
-        ResultSet resulSet = preparedStatement.executeQuery();
-        if (resulSet.next()) {
-            Partner partner = new Partner();
-            partner.setId(resulSet.getLong("ID"));
-            partner.setMoney(resulSet.getDouble("AMOUNT"));
-            partner.setType(resulSet.getString("TYPE"));
-            partner.setDateCreated(resulSet.getTimestamp("CREATIONDATE"));
-            User user = new User();
-            user.setId(resulSet.getLong("USERID"));
-            partner.setUserId(user);
-            resulSet.close();
-            preparedStatement.close();
-            return Helper.parse(partner);
-        }
-        resulSet.close();
-        preparedStatement.close();
-        return null;
+    public PartnerDto getMoneyByPartner(double money) throws Exception {
+        Partner partner = partnerRepository.findByMoney(money);
+        return Helper.parse(partner);
+
     }
 
     @Override
+    @Transactional
     public void updateMoney(PartnerDto partnerDto) throws Exception {
-        String query = "UPDATE PARTNER SET AMOUNT = ? WHERE USERID = ?";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setDouble(1, partnerDto.getMoney());
-        preparedStatement.setLong(2, partnerDto.getUserId().getId());
-        preparedStatement.executeUpdate();
+        partnerRepository.updateMoneyByUserId(partnerDto.getMoney(), partnerDto.getUserId().getId());
     }
 
     @Override
     public PartnerDto getTypeByPartner(PartnerDto partnerDto) throws Exception {
-        String query = "SELECT ID,USERID,AMOUNT,TYPE,CREATIONDATE FROM PARTNER WHERE TYPE = ?";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setString(1, partnerDto.getType());
-        ResultSet resulSet = preparedStatement.executeQuery();
-        if (resulSet.next()) {
-            Partner partner = new Partner();
-            partner.setId(resulSet.getLong("ID"));
-            partner.setMoney(resulSet.getDouble("AMOUNT"));
-            partner.setType(resulSet.getString("TYPE"));
-            partner.setDateCreated(resulSet.getTimestamp("CREATIONDATE"));
-            User user = new User();
-            user.setId(resulSet.getLong("USERID"));
-            partner.setUserId(user);
-            resulSet.close();
-            preparedStatement.close();
-            return Helper.parse(partner);
-        }
-        resulSet.close();
-        preparedStatement.close();
-        return null;
+        Partner partner = partnerRepository.findByType(partnerDto.getType());
+        return Helper.parse(partner);
     }
 
     @Override
@@ -139,13 +86,8 @@ public class PartnerDaoImplemetation implements PartnerDao {
     }
 
     @Override
+    @Transactional
     public void updatePartnerType(PartnerDto partnerDto) throws Exception {
-        String query = "UPDATE PARTNER SET TYPE = ? WHERE ID = ?";
-        PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
-        preparedStatement.setString(1, partnerDto.getType());
-        preparedStatement.setLong(2, partnerDto.getId());
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
+        partnerRepository.updatePartnerType(partnerDto.getType(), partnerDto.getId());
     }
-
 }
