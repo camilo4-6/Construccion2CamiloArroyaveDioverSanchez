@@ -20,7 +20,7 @@ public interface GuestDao {
     public void deleteGuest(GuestDto guestDto) throws Exception;
 
     public GuestDto existByGuest(UserDto userDto) throws Exception;
-
+    
     public void changeStatus(GuestDto guestDto) throws Exception;
 
     public GuestDto getGuestById(long guestId) throws Exception;
@@ -30,4 +30,6 @@ public interface GuestDao {
     public List<GuestDto> getGuestsByPartnerId(long partnerId) throws Exception;
 
     public int countGuestsByPartnerId(long partnerId) throws Exception;
+    
+    
 }

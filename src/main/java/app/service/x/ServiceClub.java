@@ -21,6 +21,7 @@ import app.dto.UserDto;
 import app.helpers.Helper;
 import app.model.Invoice;
 import app.model.InvoiceDetail;
+import app.model.Guest;
 import app.model.Partner;
 import app.model.Person;
 import app.service.interfac.AdminService;
@@ -200,8 +201,9 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
 
     @Override
     public void updateGuestStatus(GuestDto guestDto) throws Exception {
-
+        System.out.println("error 2");
         guestDao.changeStatus(guestDto);
+        System.out.println("error 3");
     }
 
     @Override
@@ -344,7 +346,6 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         }
 
     }
-
     @Override
     public void showInvoiceForPartner() throws Exception {
         PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
@@ -382,8 +383,10 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         UserDto userDto = ServiceClub.user;
         System.out.println("ingrese la cantidad de items");
         int items = invoiceValidator.validItem(Utils.getReader().nextLine());
-        GuestDto guestDto = guestDao.existByGuest(userDto);
+        
         InvoiceDto invoiceDto = new InvoiceDto();
+        
+        GuestDto guestDto = guestDao.existByGuest(userDto);
         PersonDto personDto = personDao.findByDocument(userDto.getPersonId());
         invoiceDto.setPersonId(personDto);
         invoiceDto.setPartnerId(guestDto.getPartnerId());

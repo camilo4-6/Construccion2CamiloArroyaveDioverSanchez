@@ -26,7 +26,7 @@ import org.springframework.stereotype.Controller;
 @NoArgsConstructor
 public class GuestController implements ControllerInterface {
 
-    private static final String MENU = "ingrese la opcion que desea ejecutar:  \n 1. Pasar a Socio \n 2. Para crear factura (No me dio el metodo profe) \n 3. Para cerrar sesion \n";
+    private static final String MENU = "ingrese la opcion que desea ejecutar:  \n 1. Pasar a Socio \n 2. Para crear factura \n 3. Para cerrar sesion \n";
     @Autowired
     private PersonValidator personValidator;
     @Autowired
@@ -37,6 +37,7 @@ public class GuestController implements ControllerInterface {
     private PartnerService servic;
     @Autowired
     private PartnerValidator partnerValidator;
+    
 
   
     @Override
@@ -79,7 +80,7 @@ public class GuestController implements ControllerInterface {
                 System.out.println("se ha cerrado sesion");
                 return false;
             }
-
+            
             default: {
                 System.out.println("ingrese una opcion valida");
                 return true;

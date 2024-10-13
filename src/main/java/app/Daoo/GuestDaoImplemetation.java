@@ -15,6 +15,7 @@ import app.helpers.Helper;
 import app.model.Guest;
 import app.model.Partner;
 import app.model.User;
+import jakarta.transaction.Transactional;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -83,7 +84,7 @@ public class GuestDaoImplemetation implements GuestDao {
         preparedStatement.close();
         return guests;
     }
-
+    @Transactional
     @Override
     public void changeStatus(GuestDto guestDto) throws Exception {
         guestRepository.updateGuestStatus(guestDto.getStatus(),guestDto.getId());

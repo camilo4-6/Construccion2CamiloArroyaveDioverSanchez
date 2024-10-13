@@ -5,6 +5,7 @@
 package app.dao.repositores;
 
 import app.model.Guest;
+import app.model.Partner;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 
@@ -25,7 +26,7 @@ public interface GuestRepository extends JpaRepository<Guest, Long> {
     @Modifying
     @Query("UPDATE Guest p SET p.status = ?1 WHERE p.id = ?2")
     void updateGuestStatus(String status, Long id);
-     
-    Optional<Guest> findById(Long guestId);
+    public Guest findByUserId_Id(Long id);
+    Optional<Guest>findById(Long guestId);
     
 }

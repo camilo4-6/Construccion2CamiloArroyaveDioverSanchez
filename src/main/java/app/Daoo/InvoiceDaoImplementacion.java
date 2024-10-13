@@ -51,7 +51,7 @@ public class InvoiceDaoImplementacion implements InvoiceDao{
 
     @Override
     public List<InvoiceDto> statusInvoice(InvoiceDto invoiceDto) throws Exception {
-         List<InvoiceDto> invoices = new ArrayList<>();
+        List<InvoiceDto> invoices = new ArrayList<>();
         String query = "SELECT ID,PERSONID,PARTNERID,CREATIONDATE, AMOUNT,STATUS FROM INVOICE WHERE PARTNERID = ?";
         PreparedStatement preparedStatement = MYSQLConnection.getConnection().prepareStatement(query);
         preparedStatement.setLong(1, invoiceDto.getId());

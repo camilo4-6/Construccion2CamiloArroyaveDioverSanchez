@@ -206,11 +206,10 @@ public class PartnerController implements ControllerInterface {
         System.out.println("Ingrese el ID del invitado cuyo estado desea cambiar:");
         long guestId = Long.parseLong(Utils.getReader().nextLine());
         GuestDto guestDto = service.getGuestById(guestId);
-
+        
         System.out.println("Ingrese el nuevo estado (activo/inactivo):");
-        String Status = Utils.getReader().nextLine();
-        guestDto.setStatus(Status);
-
+        String status = Utils.getReader().nextLine();
+        guestDto.setStatus(status);
         service.updateGuestStatus(guestDto);
         System.out.println("Estado del invitado actualizado exitosamente.");
         service.checkGuestLimit(partnerDto);
