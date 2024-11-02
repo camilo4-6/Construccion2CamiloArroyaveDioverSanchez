@@ -7,6 +7,8 @@ package app.controllers;
 import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
+import app.controllers.requests.CreateUserRequest;
+import app.dao.interfaces.InvoiceDao;
 import app.dto.InvoiceDto;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
@@ -17,20 +19,27 @@ import app.service.interfac.PartnerService;
 import app.service.x.ServiceClub;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author Camilo
  */
-@Controller
 @Getter
 @Setter
 @NoArgsConstructor
+@RestController
 public class AdminController implements ControllerInterface {
 
     private static final String MENU = "ingrese la opcion que desea ejecutar: \n 1. Para crear socio \n 2. Para ver lista de facturas \n 3. Para cerrar sesion\n";
@@ -44,99 +53,60 @@ public class AdminController implements ControllerInterface {
     private PartnerValidator partnerValidator;
     @Autowired
     private PartnerService services;
-
+    @Autowired
+    private InvoiceDao invoiceDao;
     @Override
     public void session() throws Exception {
-        boolean session = true;
-        while (session) {
-            session = menu();
-        }
+      
 
     }
 
-    private boolean menu() {
+  
+
+    @PostMapping("/partner")
+    public ResponseEntity createPartner(@RequestBody CreateUserRequest request) throws Exception {
+
         try {
-            System.out.println("bienvenido " + ServiceClub.user.getUserName());
-            System.out.print(MENU);
-            String option = Utils.getReader().nextLine();
-            return options(option);
-
+            String name = request.getName();
+            personValidator.validName(name);
+            long document = personValidator.validDocument(request.getDocument());
+            long celPhone = personValidator.validPhone(request.getCelPhone());
+            String userName = request.getUserName();
+            userValidator.validUserName(userName);
+            String password = request.getPassword();
+            userValidator.validUserName(password);
+            PersonDto personDto = new PersonDto();
+            personDto.setName(name);
+            personDto.setDocument(document);
+            personDto.setCelPhone(celPhone);
+            UserDto userDto = new UserDto();
+            userDto.setPersonId(personDto);
+            userDto.setUserName(userName);
+            userDto.setPassword(password);
+            userDto.setRole("partner");
+            PartnerDto partnerDto = new PartnerDto();
+            partnerDto.setUserId(userDto);
+            partnerDto.setMoney(50000);
+            partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
+            partnerDto.setType("regular");
+            this.service.createPartner(partnerDto);
+            System.out.println("se ha creado el usuario exitosamente ");
+            System.out.println("Tipo de socio: " + partnerDto.getType());
+            System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
+            System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
+            return new ResponseEntity<>("se ha creado el socio de manera exitosa", HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return true;
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    private boolean options(String option) throws Exception {
-        switch (option) {
-            case "1": {
-                this.createPartner();
-                return true;
-            }
-            case "2": {
-                this.showInvoiceForAdmin();
-                return true;
-            }
-            case "3": {
-                System.out.println("se ha cerrado sesion");
-                return false;
-            }
-           
-            default: {
-                System.out.println("ingrese una opcion valida");
-                return true;
-            }
-        }
+   @GetMapping("/facturas")
+    public ResponseEntity<List<InvoiceDto>> showInvoiceForAdmin() throws Exception {
+    List<InvoiceDto> invoices = invoiceDao.findAllInvoices();
+    if (invoices.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(invoices);
+    } else {
+        return ResponseEntity.ok(invoices);
     }
-
-    public void createPartner() throws Exception {
-        System.out.println("Ingrese el nombre del socio");
-        String name = Utils.getReader().nextLine();
-        personValidator.validName(name);
-        System.out.println("ingrese la cedula");
-        long document = personValidator.validDocument(Utils.getReader().nextLine());
-        long celPhone = ValidPhoneNumber();
-        System.out.println("ingrese el usuario del socio");
-        String userName = Utils.getReader().nextLine();
-        userValidator.validUserName(userName);
-        System.out.println("ingrese la contraseña ");
-        String password = Utils.getReader().nextLine();
-        userValidator.validUserName(password);
-        PersonDto personDto = new PersonDto();
-        personDto.setName(name);
-        personDto.setDocument(document);
-        personDto.setCelPhone(celPhone);
-        UserDto userDto = new UserDto();
-        userDto.setPersonId(personDto);
-        userDto.setUserName(userName);
-        userDto.setPassword(password);
-        userDto.setRole("partner");
-        PartnerDto partnerDto = new PartnerDto();
-        partnerDto.setUserId(userDto);
-        partnerDto.setMoney(50000);
-        partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
-        partnerDto.setType("regular");
-        this.service.createPartner(partnerDto);
-        System.out.println("se ha creado el usuario exitosamente ");
-        System.out.println("Tipo de socio: " + partnerDto.getType());
-        System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
-        System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
-    }
-
-    private long ValidPhoneNumber() throws NumberFormatException {
-        while (true) {
-            System.out.println("Ingrese el número de celular (mínimo 10 dígitos):");
-            String cellPhoneInput = Utils.getReader().nextLine();
-            if (cellPhoneInput.matches("\\d{10,}")) { // Verifica que el input tenga al menos 10 dígitos
-                return Long.parseLong(cellPhoneInput);
-            } else {
-                System.out.println("El número de celular debe tener al menos 10 dígitos. Inténtelo nuevamente.");
-            }
-        }
-    }
-
-    private void showInvoiceForAdmin() throws Exception {
-        this.services.showInvoiceForAdmin();
     }
 
 }

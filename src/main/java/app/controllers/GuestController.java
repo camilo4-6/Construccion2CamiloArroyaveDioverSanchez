@@ -7,6 +7,7 @@ package app.controllers;
 import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
+import app.controllers.requests.CreateUserRequest;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
@@ -18,9 +19,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @Getter
 @Setter
 @NoArgsConstructor
@@ -42,54 +48,14 @@ public class GuestController implements ControllerInterface {
   
     @Override
     public void session() throws Exception {
-        boolean session = true;
-        while (session) {
-            session = menu();
-        }
     }
 
-    private boolean menu() {
+   
+   
+    @PostMapping("/partnerr")
+    public ResponseEntity createPartner(@RequestBody CreateUserRequest request) throws Exception {
         try {
-            System.out.println("bienvenido " + ServiceClub.user.getUserName());
-
-            System.out.print(MENU);
-            String option = Utils.getReader().nextLine();
-            return options(option);
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return true;
-        }
-    }
-
-    private boolean options(String option) throws Exception {
-        switch (option) {
-            case "": {
-                System.out.println("");
-                return true;
-            }
-            case "1": {
-                this.createPartner();
-                return true;
-            }
-            case "2": {
-                this.guestInvoice();
-                return true;
-            }
-            case "3": {
-                System.out.println("se ha cerrado sesion");
-                return false;
-            }
-            
-            default: {
-                System.out.println("ingrese una opcion valida");
-                return true;
-            }
-        }
-    }
-
-    public void createPartner() throws Exception {
-        UserDto userDto = ServiceClub.user;
+        UserDto userDto = new UserDto();
         userDto.setRole("partner");
         PartnerDto partnerDto = new PartnerDto();
         partnerDto.setUserId(userDto);
@@ -102,6 +68,10 @@ public class GuestController implements ControllerInterface {
         System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
         System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
         this.servic.changeRol(partnerDto);
+         return new ResponseEntity<>("se ha creado el socio de manera exitosa", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     public void guestInvoice() throws Exception {

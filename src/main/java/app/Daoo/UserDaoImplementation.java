@@ -10,6 +10,7 @@ import app.dao.interfaces.UserDao;
 import app.dao.repositores.UserRepository;
 import app.dto.UserDto;
 import app.helpers.Helper;
+import app.model.Partner;
 import app.model.Person;
 import app.model.User;
 import jakarta.transaction.Transactional;
@@ -46,10 +47,10 @@ public class UserDaoImplementation implements UserDao {
     }
 
     @Override
-    public void createUser(UserDto userDto) throws Exception {
-        User user = Helper.parse(userDto);
-       userRepository.save(user);
-    }
+   public void createUser(UserDto userDto) throws Exception {
+     User user = Helper.parse(userDto);
+        userRepository.save(user);
+}
 
     @Override
     public void deleteUser(UserDto userDto) throws Exception {

@@ -35,11 +35,10 @@ public class PersonDaoImplementation implements PersonDao {
     }
 
     @Override
-    public void createPerson(PersonDto personDto) throws Exception {
-       Person person= Helper.parse(personDto);
-       personRepository.save(person);
-       
-    }
+   public void createPerson(PersonDto personDto) throws Exception {
+    Person person = Helper.parse(personDto);
+        personRepository.save(person);
+}
 
     @Override
     public void deletePerson(PersonDto personDto) throws Exception {

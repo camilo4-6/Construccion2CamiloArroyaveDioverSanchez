@@ -13,6 +13,7 @@ import app.controller.validator.InvoiceValidator;
 import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
+import app.controllers.requests.CreateUserRequest;
 import app.dao.interfaces.GuestDao;
 import app.dao.interfaces.InvoiceDao;
 import app.dao.interfaces.PartnerDao;
@@ -35,7 +36,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  *
@@ -73,123 +79,73 @@ public class PartnerController implements ControllerInterface {
 
     @Override
     public void session() throws Exception {
-        boolean session = true;
-        while (session) {
-            session = partnerSession();
-        }
+       
 
     }
 
-    private boolean partnerSession() {
-        try {
-            System.out.println("bienvenido " + ServiceClub.user.getUserName());
-            System.out.print(MENU);
-            String option = Utils.getReader().nextLine();
-            return options(option);
+    
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return true;
-        }
-    }
-
-    private boolean options(String option) throws Exception {
-        switch (option) {
-            case "1": {
-                this.createGuest();
-                return true;
-            }
-            case "2": {
-                this.addFouns();
-                return true;
-            }
-            case "3": {
-                this.statusGuest();
-                return true;
-            }
-            case "4": {
-                this.changeStatus();
-                return true;
-            }
-            case "5": {
-                this.vipPromocion();
-                return true;
-            }
-            case "6": {
-
-                this.deletePartner();
-                return false;
-            }
-            case "7": {
-                this.createVoice();
-                return true;
-            }
-            case "8": {
-                this.statusInvoice();
-                return true;
-            }
-            case "9": {
-                this.payVoice();
-                return true;
-            }
-
-            case "10": {
-                System.out.println("se ha cerrado sesion");
-                return false;
-            }
-            default: {
-                System.out.println("ingrese una opcion valida");
-                return true;
-            }
-        }
-    }
-
-    public void createGuest() throws Exception {
-        System.out.println("Ingrese el nombre del invitado");
-        String name = Utils.getReader().nextLine();
+   
+ @PostMapping("/guest")
+    public ResponseEntity createGuest(@RequestBody CreateUserRequest request) throws Exception {
+         try {
+        String name = request.getName();
         personValidator.validName(name);
-        System.out.println("ingrese la cedula");
-        long document = personValidator.validDocument(Utils.getReader().nextLine());
-        long celPhone = ValidPhoneNumber();
-        System.out.println("ingrese el usuario del invitado");
-        String userName = Utils.getReader().nextLine();
+        long document = personValidator.validDocument(request.getDocument());
+        long celPhone = personValidator.validPhone(request.getCelPhone());
+        String userName = request.getUserName();
         userValidator.validUserName(userName);
-        System.out.println("ingrese la contraseña del invitado ");
-        String password = Utils.getReader().nextLine();
-        userValidator.validPassword(password);
+        String password = request.getPassword();
+        userValidator.validUserName(password);
+
+        // Verifica si ya existe una persona con el mismo documento
         PersonDto personDto = new PersonDto();
-        personDto.setName(name);
         personDto.setDocument(document);
+        if (personDao.existByDocument(personDto)) {
+            return new ResponseEntity<>("Ya existe una persona con este documento.", HttpStatus.BAD_REQUEST);
+        }
+
+        // Crea y guarda el PersonDto
+        personDto.setName(name);
         personDto.setCelPhone(celPhone);
+        personDto = personDao.createPerson(personDto);
+
+        // Crea y guarda el UserDto
         UserDto userDto = new UserDto();
         userDto.setPersonId(personDto);
         userDto.setUserName(userName);
         userDto.setPassword(password);
         userDto.setRole("guest");
+        userDto = userDao.createUser(userDto);
+
+        if (userDto == null || userDto.getPersonId() == null) {
+            return new ResponseEntity<>("Error al crear el usuario.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        // Crea el GuestDto y guarda
         GuestDto guestDto = new GuestDto();
         guestDto.setUserId(userDto);
         guestDto.setStatus("inactivo");
-        System.out.println("se ha creado el usuario exitosamente ");
         this.service.createGuest(guestDto);
-    }
 
-    private long ValidPhoneNumber() throws NumberFormatException {
-        while (true) {
-            System.out.println("Ingrese el número de celular (mínimo 10 dígitos):");
-            String cellPhoneInput = Utils.getReader().nextLine();
-            if (cellPhoneInput.matches("\\d{10,}")) { // Verifica que el input tenga al menos 10 dígitos
-                return Long.parseLong(cellPhoneInput);
-            } else {
-                System.out.println("El número de celular debe tener al menos 10 dígitos. Inténtelo nuevamente.");
-            }
+        return new ResponseEntity<>("El socio ha sido creado exitosamente", HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
         }
-    }
 
-    public void deletePartner() throws Exception {
+    
+
+   @DeleteMapping("/partner")
+public ResponseEntity<String> deletePartner() {
+    try {
         this.service.deletePartner();
-
+     return new ResponseEntity<>("Su cuenta ha sido eliminada exitosamente.", HttpStatus.OK);
+    
+    }  catch (Exception e) {
+        return new ResponseEntity<>("Ocurrió un error al eliminar la cuenta.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+}
     public void statusGuest() throws Exception {
         PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
         if (partnerDto == null) {
