@@ -42,12 +42,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author Camilo
  */
-@Controller
+@RestController
 @Getter
 @Setter
 @NoArgsConstructor
@@ -88,7 +89,8 @@ public class PartnerController implements ControllerInterface {
    
  @PostMapping("/guest")
     public ResponseEntity createGuest(@RequestBody CreateUserRequest request) throws Exception {
-         try {
+        try {
+        // Validar datos de entrada
         String name = request.getName();
         personValidator.validName(name);
         long document = personValidator.validDocument(request.getDocument());
@@ -96,36 +98,33 @@ public class PartnerController implements ControllerInterface {
         String userName = request.getUserName();
         userValidator.validUserName(userName);
         String password = request.getPassword();
-        userValidator.validUserName(password);
+        userValidator.validPassword(password); // Cambié aquí a validPassword para la contraseña
 
-        // Verifica si ya existe una persona con el mismo documento
+        // Crear el objeto PersonDto
         PersonDto personDto = new PersonDto();
         personDto.setDocument(document);
-        if (personDao.existByDocument(personDto)) {
-            return new ResponseEntity<>("Ya existe una persona con este documento.", HttpStatus.BAD_REQUEST);
-        }
-
-        // Crea y guarda el PersonDto
         personDto.setName(name);
         personDto.setCelPhone(celPhone);
-        personDto = personDao.createPerson(personDto);
 
-        // Crea y guarda el UserDto
+        // Buscar persona por documento
+        personDto = personDao.findByDocument(personDto);
+        if (personDto == null) {
+            return new ResponseEntity<>("Persona no encontrada", HttpStatus.NOT_FOUND);
+        }
+
+        // Crear el objeto UserDto
         UserDto userDto = new UserDto();
         userDto.setPersonId(personDto);
         userDto.setUserName(userName);
         userDto.setPassword(password);
         userDto.setRole("guest");
-        userDto = userDao.createUser(userDto);
 
-        if (userDto == null || userDto.getPersonId() == null) {
-            return new ResponseEntity<>("Error al crear el usuario.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        // Crea el GuestDto y guarda
+        // Crear el objeto GuestDto
         GuestDto guestDto = new GuestDto();
         guestDto.setUserId(userDto);
         guestDto.setStatus("inactivo");
+
+        // Llamar al servicio para crear el invitado
         this.service.createGuest(guestDto);
 
         return new ResponseEntity<>("El socio ha sido creado exitosamente", HttpStatus.OK);
