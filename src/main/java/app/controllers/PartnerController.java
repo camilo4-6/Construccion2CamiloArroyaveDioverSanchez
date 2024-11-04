@@ -80,94 +80,82 @@ public class PartnerController implements ControllerInterface {
 
     @Override
     public void session() throws Exception {
-       
 
     }
 
-    
-
-   
- @PostMapping("/guest")
+    @PostMapping("/guest")
     public ResponseEntity createGuest(@RequestBody CreateUserRequest request) throws Exception {
         try {
-        // Validar datos de entrada
-        String name = request.getName();
-        personValidator.validName(name);
-        long document = personValidator.validDocument(request.getDocument());
-        long celPhone = personValidator.validPhone(request.getCelPhone());
-        String userName = request.getUserName();
-        userValidator.validUserName(userName);
-        String password = request.getPassword();
-        userValidator.validPassword(password); // Cambié aquí a validPassword para la contraseña
+            String name = request.getName();
+            personValidator.validName(name);
+            long document = personValidator.validDocument(request.getDocument());
+            long celPhone = personValidator.validPhone(request.getCelPhone());
+            String userName = request.getUserName();
+            userValidator.validUserName(userName);
+            String password = request.getPassword();
+            userValidator.validPassword(password);
+            long partnerId = personValidator.validPhone(request.getPartnerId());
+            PersonDto personDto = new PersonDto();
+            personDto.setName(name);
+            personDto.setDocument(document);
+            personDto.setCelPhone(celPhone);
+            UserDto userDto = new UserDto();
+            userDto.setPersonId(personDto);
+            userDto.setUserName(userName);
+            userDto.setPassword(password);
+            userDto.setRole("guest");
+            GuestDto guestDto = new GuestDto();
+            PartnerDto partnerDto = new PartnerDto();
+            partnerDto.setId(partnerId);
+            this.partnerDao.existByPartner(partnerDto);
 
-        // Crear el objeto PersonDto
-        PersonDto personDto = new PersonDto();
-        personDto.setDocument(document);
-        personDto.setName(name);
-        personDto.setCelPhone(celPhone);
+            guestDto.setPartnerId(partnerDto);
+            guestDto.setUserId(userDto);
+            guestDto.setStatus("inactivo");
+            this.service.createGuest(guestDto);
+            System.out.println("se ha creado el Invitado exitosamente");
+            return new ResponseEntity<>("el usuario se ha creado exitosamente", HttpStatus.OK);
 
-        // Buscar persona por documento
-        personDto = personDao.findByDocument(personDto);
-        if (personDto == null) {
-            return new ResponseEntity<>("Persona no encontrada", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-        // Crear el objeto UserDto
-        UserDto userDto = new UserDto();
-        userDto.setPersonId(personDto);
-        userDto.setUserName(userName);
-        userDto.setPassword(password);
-        userDto.setRole("guest");
-
-        // Crear el objeto GuestDto
-        GuestDto guestDto = new GuestDto();
-        guestDto.setUserId(userDto);
-        guestDto.setStatus("inactivo");
-
-        // Llamar al servicio para crear el invitado
-        this.service.createGuest(guestDto);
-
-        return new ResponseEntity<>("El socio ha sido creado exitosamente", HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
+
+    @DeleteMapping("/partner")
+    public ResponseEntity<String> deletePartner() {
+        try {
+            this.service.deletePartner();
+            return new ResponseEntity<>("Su cuenta ha sido eliminada exitosamente.", HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Ocurrió un error al eliminar la cuenta.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-    
-
-   @DeleteMapping("/partner")
-public ResponseEntity<String> deletePartner() {
-    try {
-        this.service.deletePartner();
-     return new ResponseEntity<>("Su cuenta ha sido eliminada exitosamente.", HttpStatus.OK);
-    
-    }  catch (Exception e) {
-        return new ResponseEntity<>("Ocurrió un error al eliminar la cuenta.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
+
     public void statusGuest() throws Exception {
-        PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
-        if (partnerDto == null) {
+       // PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
+        //if (partnerDto == null) {
             System.out.println("No se encontró un socio asociado al usuario.");
             return;
-        }
-        service.showGuestsForPartner(partnerDto);
+      //  }
+       // service.showGuestsForPartner(partnerDto);
 
     }
 
     public void changeStatus() throws Exception {
 
-        PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
+    //    PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
         System.out.println("Ingrese el ID del invitado cuyo estado desea cambiar:");
         long guestId = Long.parseLong(Utils.getReader().nextLine());
         GuestDto guestDto = service.getGuestById(guestId);
-        
+
         System.out.println("Ingrese el nuevo estado (activo/inactivo):");
         String status = Utils.getReader().nextLine();
         guestDto.setStatus(status);
         service.updateGuestStatus(guestDto);
         System.out.println("Estado del invitado actualizado exitosamente.");
-        service.checkGuestLimit(partnerDto);
+      //  service.checkGuestLimit(partnerDto);
     }
 
     public void addFouns() throws Exception {
@@ -184,14 +172,12 @@ public ResponseEntity<String> deletePartner() {
 
     public void statusInvoice() throws Exception {
         this.service.showInvoiceForPartner();
-        
+
     }
+
     public void payVoice() throws Exception {
-      
+
         this.service.payInvoice();
-        
-    }
-    }
 
- 
-
+    }
+}

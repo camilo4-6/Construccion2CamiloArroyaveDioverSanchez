@@ -21,5 +21,6 @@ public class CreateUserRequest {
     public String userName;
     public String document;
     public String password;
-    
+    public String partnerId;
+
 }

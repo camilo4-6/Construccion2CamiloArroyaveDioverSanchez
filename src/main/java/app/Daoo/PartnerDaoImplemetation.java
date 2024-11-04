@@ -50,8 +50,8 @@ public class PartnerDaoImplemetation implements PartnerDao {
     }
 
     @Override
-    public PartnerDto existByPartner(UserDto userDto) throws Exception {
-        Partner partner = partnerRepository.findByUserId_Id(userDto.getId());
+    public PartnerDto existByPartner(PartnerDto partnerDto) throws Exception {
+        Partner partner = partnerRepository.findByUserId_Id(partnerDto.getId());
         return Helper.parse(partner);
     }
 

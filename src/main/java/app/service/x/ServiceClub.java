@@ -114,21 +114,23 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
 
     @Override
     public void createPartner(PartnerDto partnerDto) throws Exception {
-        checkVipLimit(partnerDto);
-        this.createUser(partnerDto.getUserId());
-        UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
-        partnerDto.setUserId(userDto);
-        try {
-            this.partnerDao.createPartner(partnerDto);
-        } catch (SQLException e) {
-            this.userDao.deleteUser(userDto);
-            throw new Exception("error al crear el partner");
-        }
+       checkVipLimit(partnerDto);
+    createUser(partnerDto.getUserId());
+
+    UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
+    partnerDto.setUserId(userDto);
+    
+    try {
+        partnerDao.createPartner(partnerDto);
+    } catch (SQLException e) {
+        userDao.deleteUser(userDto);
+        throw new Exception("Error al crear el partner", e);
+    }
     }
 
     @Override
     public void createGuest(GuestDto guestDto) throws Exception {
-        this.createUser(guestDto.getUserId());
+      /*  this.createUser(guestDto.getUserId());
         UserDto userDto = userDao.findByUserName(guestDto.getUserId());
         guestDto.setUserId(userDto);
         PartnerDto partnerDto = partnerDao.existByPartner(user);
@@ -140,13 +142,13 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
             this.userDao.deleteUser(userDto);
 
             throw new Exception("error al crear el invitador", e);
-        }
+       }*/ 
     }
 
     @Override
     public void deletePartner() throws Exception {
 
-        UserDto users = ServiceClub.user;
+       /* UserDto users = ServiceClub.user;
         try {
 
             PartnerDto partnerDto = this.partnerDao.existByPartner(users);
@@ -159,7 +161,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
             this.logout();
         } catch (SQLException e) {
             System.out.println("El usuario no existe en la base de datos.");
-        }
+        }*/ 
     }
 
     @Override
@@ -208,7 +210,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
 
     @Override
     public void updateMoney() throws Exception {
-        UserDto users = ServiceClub.user;
+       /* UserDto users = ServiceClub.user;
         PartnerDto partnerDto = partnerDao.existByPartner(users);
         System.out.println("su tipo es :" + partnerDto.getType());
         System.out.println("El dinero con el cuenta ahora mismo es:" + partnerDto.getMoney());
@@ -229,7 +231,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         partnerDto.setMoney(addFound);
         this.partnerDao.getMoneyByPartner(addFound);
         this.partnerDao.updateMoney(partnerDto);
-
+*/ 
     }
 
     @Override
@@ -256,7 +258,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
 
     @Override
     public void vipPromocion() throws Exception {
-
+/*
         PartnerDto partnerDto = this.partnerDao.existByPartner(user);
         checkVipLimit(partnerDto);
         if ("regular".equals(partnerDto.getType())) {
@@ -273,7 +275,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         } else {
             System.out.println("Ya eres un socio VIP o no eres un socio regular.");
 
-        }
+        }*/ 
 
     }
 
@@ -284,7 +286,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
 
     @Override
     public void createInvoice() throws Exception {
-        UserDto userDto = ServiceClub.user;
+      /*  UserDto userDto = ServiceClub.user;
         System.out.println("ingrese la cantidad de items");
         int items = invoiceValidator.validItem(Utils.getReader().nextLine());
 
@@ -320,12 +322,12 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
             InvoiceDetail invoiceDetail = Helper.parse(detail);
             invoiceDetail.setInvoiceId(invoice);
             invoiceDetailDao.createInvoiceDetail(invoiceDetail);
-        }
+        }*/ 
     }
 
     @Override
     public void payInvoice() throws Exception {
-
+ /* 
         PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
         System.out.println("Ingrese el ID de la factura que desea pagar:");
         long invoiceId = Long.parseLong(Utils.getReader().nextLine());
@@ -344,11 +346,11 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         if ("Pagada".equals(invoiceDto.getStatus())) {
             throw new Exception("La factura ya ha sido pagada.");
         }
-
+*/ 
     }
     @Override
     public void showInvoiceForPartner() throws Exception {
-        PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
+       /*   PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
         UserDto users = ServiceClub.user;
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(partnerDto.getId());
@@ -361,7 +363,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         for (InvoiceDto invoice : invoices) {
             System.out.println("ID: " + invoice.getId() + "\n Status: " + invoice.getStatus() + "\n Valor: " + invoice.getAmount());
         }
-
+*/
     }
 
     @Override
