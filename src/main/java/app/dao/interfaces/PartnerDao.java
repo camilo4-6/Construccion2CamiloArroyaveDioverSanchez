@@ -18,7 +18,7 @@ public interface PartnerDao {
 
     public void deletePartner(PartnerDto partnerDto) throws Exception;
 
-    public PartnerDto existByPartner(PartnerDto partnerDto) throws Exception;
+    public boolean existByPartner(PartnerDto partnerDto) throws Exception;
 
     public PartnerDto getMoneyByPartner(double getMoney) throws Exception;
 
@@ -30,4 +30,5 @@ public interface PartnerDao {
 
     public void updatePartnerType(PartnerDto partnerDto) throws Exception;
 
+     PartnerDto findById(long partnerId) throws Exception;
 }

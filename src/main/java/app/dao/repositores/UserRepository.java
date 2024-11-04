@@ -28,4 +28,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
     @Query("UPDATE User u SET u.role = :role WHERE u.userName = :userName")
     public void updateUserRole(String role, String userName);
     
+    
 }

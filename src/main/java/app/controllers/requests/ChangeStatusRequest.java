@@ -15,13 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateUserRequest {
-    public String name;
-    public String celPhone;
-    public String userName;
-    public String document;
-    public String password;
-    public Long partnerId;
-    public String userId;
-
+public class ChangeStatusRequest {
+   private long guestId;
+    private String status;  
 }

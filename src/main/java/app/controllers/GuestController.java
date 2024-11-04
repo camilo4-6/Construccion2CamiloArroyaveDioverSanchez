@@ -8,6 +8,7 @@ import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
 import app.controllers.requests.CreateUserRequest;
+import app.dao.interfaces.UserDao;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
 import app.dto.UserDto;
@@ -43,6 +44,8 @@ public class GuestController implements ControllerInterface {
     private PartnerService servic;
     @Autowired
     private PartnerValidator partnerValidator;
+    @Autowired
+    private UserDao userDao;
     
 
   
@@ -55,7 +58,10 @@ public class GuestController implements ControllerInterface {
     @PostMapping("/partnerr")
     public ResponseEntity createPartner(@RequestBody CreateUserRequest request) throws Exception {
         try {
+        long userId = personValidator.validPhone(request.getUserId());
         UserDto userDto = new UserDto();
+        userDto.setId(userId);
+        this.userDao.findById(userId);
         userDto.setRole("partner");
         PartnerDto partnerDto = new PartnerDto();
         partnerDto.setUserId(userDto);

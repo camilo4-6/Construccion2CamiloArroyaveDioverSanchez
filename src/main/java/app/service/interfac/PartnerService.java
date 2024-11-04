@@ -8,6 +8,7 @@ import app.dto.GuestDto;
 import app.dto.InvoiceDto;
 import app.dto.PartnerDto;
 import app.dto.UserDto;
+import java.util.List;
 
 public interface PartnerService {
 
@@ -17,7 +18,7 @@ public interface PartnerService {
 
     public void changeRol(PartnerDto partnerDto) throws Exception;
 
-    public void showGuestsForPartner(PartnerDto partnerDto) throws Exception;
+    public List<GuestDto>  showGuestsForPartner(PartnerDto partnerDto) throws Exception;
 
     GuestDto getGuestById(long guestId) throws Exception;
 
@@ -31,7 +32,7 @@ public interface PartnerService {
     
     public int countActiveGuestsByPartner(long partnerId) throws Exception;
     
-    public void updateMoney() throws Exception;
+    public void updateMoney(long partnerId, double amount) throws Exception;
      
     public void createInvoice() throws Exception;
     

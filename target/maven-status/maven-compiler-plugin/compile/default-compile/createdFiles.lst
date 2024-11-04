@@ -13,6 +13,7 @@ app\model\Partner.class
 app\controller\validator\InvoiceValidator.class
 app\controller\validator\PartnerValidator.class
 app\model\Guest.class
+app\controllers\requests\AddFundsRequest.class
 app\model\User.class
 app\controller\validator\GuestValidator.class
 app\dto\UserDto.class
@@ -32,6 +33,7 @@ app\AppApplication.class
 app\dto\InvoiceDetailDto.class
 app\dao\repositores\InvoiceDetailRepository.class
 app\service\interfac\LoginService.class
+app\controllers\requests\ChangeStatusRequest.class
 app\dao\repositores\InvoiceRepository.class
 app\dao\interfaces\PartnerDao.class
 app\controllers\ControllerInterface.class

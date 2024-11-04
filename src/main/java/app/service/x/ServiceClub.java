@@ -130,19 +130,19 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
 
     @Override
     public void createGuest(GuestDto guestDto) throws Exception {
-      /*  this.createUser(guestDto.getUserId());
-        UserDto userDto = userDao.findByUserName(guestDto.getUserId());
-        guestDto.setUserId(userDto);
-        PartnerDto partnerDto = partnerDao.existByPartner(user);
-        guestDto.setPartnerId(partnerDto);
+         this.createUser(guestDto.getUserId());
 
-        try {
-            this.guestDao.createGuest(guestDto);
-        } catch (SQLException e) {
-            this.userDao.deleteUser(userDto);
+    UserDto userDto = userDao.findByUserName(guestDto.getUserId());
+    guestDto.setUserId(userDto);
+    PartnerDto partnerDto = partnerDao.findById(guestDto.getPartnerId().getId());
+    guestDto.setPartnerId(partnerDto);
 
-            throw new Exception("error al crear el invitador", e);
-       }*/ 
+    try {
+        this.guestDao.createGuest(guestDto);
+    } catch (SQLException e) {
+        this.userDao.deleteUser(userDto); 
+        throw new Exception("Error al crear el invitado", e);
+    }
     }
 
     @Override
@@ -167,33 +167,34 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
     @Override
     public void changeRol(PartnerDto partnerDto) throws Exception {
 
-        UserDto users = ServiceClub.user;
-        GuestDto guestDto = this.guestDao.existByGuest(users);
+    UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
+    GuestDto guestDto = this.guestDao.existByGuest(userDto);
+    if (guestDto != null) {
         this.guestDao.deleteGuest(guestDto);
-        UserDto userDto = userDao.findByUserName(users);
-        partnerDto.setUserId(userDto);
-        userDto.setRole("partner");
-        this.userDao.updateUserRole(userDto);
-        try {
-            this.partnerDao.createPartner(partnerDto);
-            System.out.println("Se ha convertido el Invitado en  exitosamente.");
+    }
 
-        } catch (SQLException e) {
-            System.out.println("El usuario no existe en la base de datos.");
-        }
+    userDto.setRole("partner");
+    this.userDao.updateUserRole(userDto);
+
+    try {
+        this.partnerDao.createPartner(partnerDto);
+        System.out.println("Se ha convertido el Invitado en socio exitosamente.");
+    } catch (SQLException e) {
+        throw new Exception("Error al crear el socio: " + e.getMessage(), e);
+    }
     }
 
     @Override
-    public void showGuestsForPartner(PartnerDto partnerDto) throws Exception {
-        UserDto users = ServiceClub.user;
-        List<GuestDto> guests = guestDao.statusGuest(partnerDto);
+   public List<GuestDto> showGuestsForPartner(PartnerDto partnerDto) throws Exception {
+    
+    List<GuestDto> guests = guestDao.statusGuest(partnerDto);
 
-        System.out.println("Invitados registrados para el socio con el user name " + users.getUserName() + ":");
-        for (GuestDto guest : guests) {
+    
+    for (GuestDto guest : guests) {
+        System.out.println("ID: " + guest.getId() + "\n UserID: " + guest.getUserId().getId() + "\n Status: " + guest.getStatus());
+    }
 
-            System.out.println("ID: " + guest.getId() + "\n UserID: " + guest.getUserId().getId() + "\n Status: " + guest.getStatus());
-
-        }
+    return guests;
     }
 
     @Override
@@ -208,31 +209,31 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         System.out.println("error 3");
     }
 
-    @Override
-    public void updateMoney() throws Exception {
-       /* UserDto users = ServiceClub.user;
-        PartnerDto partnerDto = partnerDao.existByPartner(users);
-        System.out.println("su tipo es :" + partnerDto.getType());
-        System.out.println("El dinero con el cuenta ahora mismo es:" + partnerDto.getMoney());
-        System.out.println("Cuanto desea ingresar : ");
-        double getMoney = Double.parseDouble(Utils.getReader().nextLine());
-        addFound = partnerDto.getMoney() + getMoney;
-        if ("regular".equals(partnerDto.getType()) && addFound >= 1000000) {
+@Override
+public void updateMoney(long partnerId, double amount) throws Exception {
 
-            System.out.println("No puedes tener mas de 1000000");
-            addFound = addFound - getMoney;
+    PartnerDto existingPartner = partnerDao.findById(partnerId);
 
-        }
-
-        if ("vip".equals(partnerDto.getType()) && addFound >= 5000000) {
-            System.out.println("No puedes tener mas de 5000000");
-            addFound = addFound - getMoney;
-        }
-        partnerDto.setMoney(addFound);
-        this.partnerDao.getMoneyByPartner(addFound);
-        this.partnerDao.updateMoney(partnerDto);
-*/ 
+    if (existingPartner == null) {
+        throw new Exception("Socio no encontrado.");
     }
+
+    double totalMoney = existingPartner.getMoney() + amount;
+
+    
+    if ("regular".equals(existingPartner.getType()) && totalMoney > 1000000) {
+        throw new Exception("No puedes tener más de 1,000,000.");
+    }
+
+    if ("vip".equals(existingPartner.getType()) && totalMoney > 5000000) {
+        throw new Exception("No puedes tener más de 5,000,000.");
+    }
+
+    existingPartner.setMoney(totalMoney);
+    this.partnerDao.updateMoney(existingPartner); // Asegúrate de tener este método en tu repositorio
+    System.out.println("Fondos actualizados exitosamente. Nuevo saldo: " + existingPartner.getMoney());
+}
+
 
     @Override
     public void checkVipLimit(PartnerDto partnerDto) throws Exception {

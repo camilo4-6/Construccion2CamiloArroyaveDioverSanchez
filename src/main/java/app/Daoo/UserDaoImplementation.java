@@ -8,6 +8,7 @@ package app.Daoo;
 import app.config.MYSQLConnection;
 import app.dao.interfaces.UserDao;
 import app.dao.repositores.UserRepository;
+import app.dto.PartnerDto;
 import app.dto.UserDto;
 import app.helpers.Helper;
 import app.model.Partner;
@@ -64,6 +65,13 @@ public class UserDaoImplementation implements UserDao {
     public void updateUserRole(UserDto userDto) throws Exception {
         userRepository.updateUserRole(userDto.getRole(), userDto.getUserName());
     }
+  @Override
+    public UserDto findById(long userId) throws Exception {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new Exception("Socio no encontrado."));
+
+        return Helper.parse(user);
+}
 }
 
 

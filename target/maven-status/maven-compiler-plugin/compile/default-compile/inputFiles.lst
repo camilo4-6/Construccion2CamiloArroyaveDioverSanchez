@@ -12,6 +12,8 @@ C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanch
 C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\controllers\GuestController.java
 C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\controllers\LoginController.java
 C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\controllers\PartnerController.java
+C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\controllers\requests\AddFundsRequest.java
+C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\controllers\requests\ChangeStatusRequest.java
 C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\controllers\requests\CreateUserRequest.java
 C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\controllers\Utils.java
 C:\Users\Camilo\Desktop\Nueva carpeta (2)\Construccion2CamiloArroyaveDioverSanchez\src\main\java\app\dao\interfaces\GuestDao.java

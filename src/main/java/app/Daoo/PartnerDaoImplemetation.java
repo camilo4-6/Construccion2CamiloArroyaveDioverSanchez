@@ -50,9 +50,9 @@ public class PartnerDaoImplemetation implements PartnerDao {
     }
 
     @Override
-    public PartnerDto existByPartner(PartnerDto partnerDto) throws Exception {
+    public boolean existByPartner(PartnerDto partnerDto) throws Exception {
         Partner partner = partnerRepository.findByUserId_Id(partnerDto.getId());
-        return Helper.parse(partner);
+        return partner != null;
     }
 
     @Override
@@ -89,5 +89,13 @@ public class PartnerDaoImplemetation implements PartnerDao {
     @Transactional
     public void updatePartnerType(PartnerDto partnerDto) throws Exception {
         partnerRepository.updatePartnerType(partnerDto.getType(), partnerDto.getId());
+    }
+
+    @Override
+    public PartnerDto findById(long partnerId) throws Exception {
+        Partner partner = partnerRepository.findById(partnerId)
+                .orElseThrow(() -> new Exception("Socio no encontrado."));
+
+        return Helper.parse(partner);
     }
 }

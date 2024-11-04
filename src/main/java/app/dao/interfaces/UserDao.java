@@ -21,4 +21,6 @@ public interface UserDao {
     public void deleteUser(UserDto userDto) throws Exception;
 
     public void updateUserRole(UserDto userDto) throws Exception;
+    
+    public UserDto findById(long userId)throws Exception ;
 }
