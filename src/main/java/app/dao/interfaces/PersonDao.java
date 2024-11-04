@@ -4,6 +4,7 @@
  */
 package app.dao.interfaces;
 
+import app.dto.PartnerDto;
 import app.dto.PersonDto;
 
 /**
@@ -20,4 +21,5 @@ public interface PersonDao {
 
     public PersonDto findByDocument(PersonDto personDto) throws Exception;
 
+    public PersonDto findById(long personId) throws Exception; 
 }

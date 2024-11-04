@@ -16,6 +16,8 @@ import app.controller.validator.UserValidator;
 import app.controllers.requests.AddFundsRequest;
 import app.controllers.requests.ChangeStatusRequest;
 import app.controllers.requests.CreateUserRequest;
+import app.controllers.requests.InvoiceRequest;
+import app.controllers.requests.ParnerInvoice;
 import app.dao.interfaces.GuestDao;
 import app.dao.interfaces.InvoiceDao;
 import app.dao.interfaces.PartnerDao;
@@ -86,46 +88,45 @@ public class PartnerController implements ControllerInterface {
 
     }
 
-    
     @PostMapping("/guest")
-public ResponseEntity<?> createGuest(@RequestBody CreateUserRequest request) {
-    try {
-        
-        String name = request.getName();
-        personValidator.validName(name);
-        long document = personValidator.validDocument(request.getDocument());
-        long celPhone = personValidator.validPhone(request.getCelPhone());
-        String userName = request.getUserName();
-        userValidator.validUserName(userName);
-        String password = request.getPassword();
-        userValidator.validPassword(password);
-        long partnerId = request.getPartnerId(); 
-        PersonDto personDto = new PersonDto();
-        personDto.setName(name);
-        personDto.setDocument(document);
-        personDto.setCelPhone(celPhone);
-        UserDto userDto = new UserDto();
-        userDto.setPersonId(personDto);
-        userDto.setUserName(userName);
-        userDto.setPassword(password);
-        userDto.setRole("guest");
-        PartnerDto partnerDto = new PartnerDto();
-        partnerDto.setId(partnerId);
-        PartnerDto Partner = partnerDao.findById(partnerId);
-        if (Partner == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Socio no encontrado.");
+    public ResponseEntity<?> createGuest(@RequestBody CreateUserRequest request) {
+        try {
+
+            String name = request.getName();
+            personValidator.validName(name);
+            long document = personValidator.validDocument(request.getDocument());
+            long celPhone = personValidator.validPhone(request.getCelPhone());
+            String userName = request.getUserName();
+            userValidator.validUserName(userName);
+            String password = request.getPassword();
+            userValidator.validPassword(password);
+            long partnerId = request.getPartnerId();
+            PersonDto personDto = new PersonDto();
+            personDto.setName(name);
+            personDto.setDocument(document);
+            personDto.setCelPhone(celPhone);
+            UserDto userDto = new UserDto();
+            userDto.setPersonId(personDto);
+            userDto.setUserName(userName);
+            userDto.setPassword(password);
+            userDto.setRole("guest");
+            PartnerDto partnerDto = new PartnerDto();
+            partnerDto.setId(partnerId);
+            PartnerDto Partner = partnerDao.findById(partnerId);
+            if (Partner == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Socio no encontrado.");
+            }
+            GuestDto guestDto = new GuestDto();
+            guestDto.setPartnerId(partnerDto);
+            guestDto.setUserId(userDto);
+            guestDto.setStatus("inactivo");
+            this.service.createGuest(guestDto);
+            System.out.println("Se ha creado el Invitado exitosamente.");
+            return new ResponseEntity<>("El usuario se ha creado exitosamente", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        GuestDto guestDto = new GuestDto();
-        guestDto.setPartnerId(partnerDto);
-        guestDto.setUserId(userDto);
-        guestDto.setStatus("inactivo");
-        this.service.createGuest(guestDto);
-        System.out.println("Se ha creado el Invitado exitosamente.");
-        return new ResponseEntity<>("El usuario se ha creado exitosamente", HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-}
 
     @DeleteMapping("/partner1")
     public ResponseEntity<String> deletePartner() {
@@ -137,33 +138,32 @@ public ResponseEntity<?> createGuest(@RequestBody CreateUserRequest request) {
             return new ResponseEntity<>("Ocurrió un error al eliminar la cuenta.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-     @PostMapping("/partner2")
+
+    @PostMapping("/partner2")
     public ResponseEntity<?> statusGuest(@RequestBody CreateUserRequest request) throws Exception {
-         try {
-        
-        PartnerDto partnerDto = new PartnerDto();
-        long partnerId = request.getPartnerId(); 
-        partnerDto.setId(partnerId);
-        partnerDto.setId(request.getPartnerId());
-        
-       
-         PartnerDto Partner = partnerDao.findById(partnerId);
-        if (Partner==null) {
-            System.out.println("No se encontró un socio asociado al usuario.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró un socio asociado al usuario.");
+        try {
+
+            PartnerDto partnerDto = new PartnerDto();
+            long partnerId = request.getPartnerId();
+            partnerDto.setId(partnerId);
+            partnerDto.setId(request.getPartnerId());
+
+            PartnerDto Partner = partnerDao.findById(partnerId);
+            if (Partner == null) {
+                System.out.println("No se encontró un socio asociado al usuario.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró un socio asociado al usuario.");
+            }
+
+            List<GuestDto> guests = service.showGuestsForPartner(partnerDto);
+            return ResponseEntity.ok(guests);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        
-        List<GuestDto> guests = service.showGuestsForPartner(partnerDto);
-        return ResponseEntity.ok(guests);
-
-    } catch (Exception e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-
-    }
- @PostMapping("/change-status")
+    @PostMapping("/change-status")
     public ResponseEntity<?> changeStatus(@RequestBody ChangeStatusRequest request) {
         try {
             long guestId = request.getGuestId();
@@ -177,29 +177,49 @@ public ResponseEntity<?> createGuest(@RequestBody CreateUserRequest request) {
         }
     }
 
-    
     @PostMapping("/add-funds")
     public ResponseEntity<?> addFunds(@RequestBody AddFundsRequest request) {
         try {
-           service.updateMoney(request.getPartnerId(), request.getAmount());
-            
+            service.updateMoney(request.getPartnerId(), request.getAmount());
+
             return ResponseEntity.ok("Fondos añadidos exitosamente.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-
     public void vipPromocion() throws Exception {
         this.service.vipPromocion();
     }
 
-    public void createVoice() throws Exception {
-        this.service.createInvoice();
+    @PostMapping("/create-invoice")
+    public ResponseEntity<?> createVoice(@RequestBody InvoiceRequest request) {
+        try {
+            service.createInvoice(request);
+            return ResponseEntity.ok("Factura creada exitosamente.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    public void statusInvoice() throws Exception {
-        this.service.showInvoiceForPartner();
+    @PostMapping("/status-invoice")
+    public ResponseEntity<?> statusInvoice(@RequestBody ParnerInvoice request) throws Exception {
+        try {
+            PartnerDto partnerDto = new PartnerDto();
+            long partnerId = request.getPartnerId();
+
+            partnerDto.setId(partnerId);
+            PartnerDto Partner = partnerDao.findById(partnerId);
+            if (Partner == null) {
+                System.out.println("No se encontró un socio asociado al usuario.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró un socio asociado al usuario.");
+            }
+            List<InvoiceDto> invoices = service.showInvoiceForPartner(request);
+
+            return ResponseEntity.ok(invoices);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 

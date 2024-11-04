@@ -53,5 +53,13 @@ public class PersonDaoImplementation implements PersonDao {
     
 }
 
+    @Override
+    public PersonDto findById(long personId) throws Exception {
+            Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new Exception("Socio no encontrado."));
+
+        return Helper.parse(person); 
+    }
+
 
 }

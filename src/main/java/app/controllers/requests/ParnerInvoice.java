@@ -4,7 +4,6 @@
  */
 package app.controllers.requests;
 
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,13 +11,10 @@ import lombok.Setter;
 /**
  *
  * @author Camilo
- */
-@Getter
+ */@Getter
 @Setter
 @NoArgsConstructor
-public class InvoiceRequest {
-     private long userId;
-    private List <InvoiceItem> items;
+public class ParnerInvoice {
     public Long partnerId;
      public Long personId;
 }
