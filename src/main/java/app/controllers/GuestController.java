@@ -60,8 +60,11 @@ public class GuestController implements ControllerInterface {
         try {
         long userId = personValidator.validPhone(request.getUserId());
         UserDto userDto = new UserDto();
-        userDto.setId(userId);
+        
         this.userDao.findById(userId);
+         if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+         }
         userDto.setRole("partner");
         PartnerDto partnerDto = new PartnerDto();
         partnerDto.setUserId(userDto);

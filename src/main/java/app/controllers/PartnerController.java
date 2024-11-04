@@ -145,11 +145,9 @@ public ResponseEntity<?> createGuest(@RequestBody CreateUserRequest request) {
         long partnerId = request.getPartnerId(); 
         partnerDto.setId(partnerId);
         partnerDto.setId(request.getPartnerId());
-
+        
        
-        
-        
-        PartnerDto Partner = partnerDao.findById(partnerId);
+         PartnerDto Partner = partnerDao.findById(partnerId);
         if (Partner==null) {
             System.out.println("No se encontró un socio asociado al usuario.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró un socio asociado al usuario.");
