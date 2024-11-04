@@ -8,10 +8,12 @@ import app.config.MYSQLConnection;
 import app.dao.interfaces.InvoiceDao;
 import app.dao.repositores.InvoiceRepository;
 import app.dto.InvoiceDto;
+import app.dto.UserDto;
 import app.helpers.Helper;
 import app.model.Invoice;
 import app.model.Partner;
 import app.model.Person;
+import app.model.User;
 import jakarta.transaction.Transactional;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -103,6 +105,13 @@ public class InvoiceDaoImplementacion implements InvoiceDao{
     public void changeStatus(InvoiceDto invoiceDto) throws Exception {
          invoiceRepository.changeStatus(invoiceDto.getStatus(), invoiceDto.getId());
     }
+    @Override
+    public InvoiceDto findById(long invoiceId) throws Exception {
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(() -> new Exception("Socio no encontrado."));
+
+        return Helper.parse(invoice);
     }
+}
 
 

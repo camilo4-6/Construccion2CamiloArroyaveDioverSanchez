@@ -23,4 +23,6 @@ public interface InvoiceDao {
     public void changeStatus(InvoiceDto invoiceDto) throws Exception;
 
     public List<InvoiceDto> findAllInvoices() throws Exception;
+    
+     public InvoiceDto findById(long invoiceId) throws Exception;
 }

@@ -18,6 +18,7 @@ import app.controllers.requests.ChangeStatusRequest;
 import app.controllers.requests.CreateUserRequest;
 import app.controllers.requests.InvoiceRequest;
 import app.controllers.requests.ParnerInvoice;
+import app.controllers.requests.PayInvoice;
 import app.dao.interfaces.GuestDao;
 import app.dao.interfaces.InvoiceDao;
 import app.dao.interfaces.PartnerDao;
@@ -222,10 +223,13 @@ public class PartnerController implements ControllerInterface {
         }
 
     }
-
-    public void payVoice() throws Exception {
-
-        this.service.payInvoice();
-
+    @PostMapping("/pay-voices")
+    public ResponseEntity<?> payVoice(@RequestBody PayInvoice request) throws Exception {
+     try {
+         service.payInvoice(request);
+         return ResponseEntity.ok("Factura creada exitosamente.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -9,6 +9,7 @@ import app.controllers.Utils;
 import app.controllers.requests.InvoiceItem;
 import app.controllers.requests.InvoiceRequest;
 import app.controllers.requests.ParnerInvoice;
+import app.controllers.requests.PayInvoice;
 import app.dao.interfaces.GuestDao;
 import app.dao.interfaces.InvoiceDao;
 import app.dao.interfaces.InvoiceDetailDao;
@@ -317,11 +318,11 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
     }
 
     @Override
-    public void payInvoice() throws Exception {
-        /* 
-        PartnerDto partnerDto = partnerDao.existByPartner(ServiceClub.user);
-        System.out.println("Ingrese el ID de la factura que desea pagar:");
-        long invoiceId = Long.parseLong(Utils.getReader().nextLine());
+    public void payInvoice(PayInvoice request) throws Exception {
+        
+         long partnerId = request.getPartnerId();
+        PartnerDto partnerDto = partnerDao.findById(partnerId);
+        long invoiceId = request.getInvoiceId();
         InvoiceDto invoiceDto = invoiceDao.existsByIDInvoice(invoiceId);
 
         if (partnerDto.getMoney() < invoiceDto.getAmount()) {
@@ -337,7 +338,7 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         if ("Pagada".equals(invoiceDto.getStatus())) {
             throw new Exception("La factura ya ha sido pagada.");
         }
-         */
+         
     }
 
     @Override

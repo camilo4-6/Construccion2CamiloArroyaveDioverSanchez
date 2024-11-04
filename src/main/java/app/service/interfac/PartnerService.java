@@ -6,6 +6,7 @@ package app.service.interfac;
 
 import app.controllers.requests.InvoiceRequest;
 import app.controllers.requests.ParnerInvoice;
+import app.controllers.requests.PayInvoice;
 import app.dto.GuestDto;
 import app.dto.InvoiceDto;
 import app.dto.PartnerDto;
@@ -38,7 +39,7 @@ public interface PartnerService {
      
     public void createInvoice(InvoiceRequest request) throws Exception;
     
-    public void payInvoice() throws Exception;
+    public void payInvoice(PayInvoice request) throws Exception;
     
     public List<InvoiceDto> showInvoiceForPartner(ParnerInvoice request) throws  Exception;
     
