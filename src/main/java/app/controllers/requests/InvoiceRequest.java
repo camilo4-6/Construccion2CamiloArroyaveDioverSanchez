@@ -21,4 +21,5 @@ public class InvoiceRequest {
     private List <InvoiceItem> items;
     public Long partnerId;
      public Long personId;
+     public Long guestId;
 }

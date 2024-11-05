@@ -7,7 +7,9 @@ package app.controllers;
 import app.controller.validator.PartnerValidator;
 import app.controller.validator.PersonValidator;
 import app.controller.validator.UserValidator;
+import app.controllers.requests.ChangeRol;
 import app.controllers.requests.CreateUserRequest;
+import app.controllers.requests.InvoiceRequest;
 import app.dao.interfaces.UserDao;
 import app.dto.PartnerDto;
 import app.dto.PersonDto;
@@ -46,45 +48,46 @@ public class GuestController implements ControllerInterface {
     private PartnerValidator partnerValidator;
     @Autowired
     private UserDao userDao;
-    
 
-  
     @Override
     public void session() throws Exception {
     }
 
-   
-   
-    @PostMapping("/partnerr")
-    public ResponseEntity createPartner(@RequestBody CreateUserRequest request) throws Exception {
+    @PostMapping("/create- partner")
+    public ResponseEntity <?> createPartner(@RequestBody ChangeRol request) throws Exception {
         try {
-        long userId = personValidator.validPhone(request.getUserId());
-        UserDto userDto = new UserDto();
-        
-        this.userDao.findById(userId);
-         if (userDto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
-         }
-        userDto.setRole("partner");
-        PartnerDto partnerDto = new PartnerDto();
-        partnerDto.setUserId(userDto);
-        partnerDto.setMoney(50000);
-        partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
-        partnerDto.setType("regular");
 
-        System.out.println("se ha creado el usuario exitosamente ");
-        System.out.println("Tipo de socio: " + partnerDto.getType());
-        System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
-        System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
-        this.servic.changeRol(partnerDto);
-         return new ResponseEntity<>("se ha creado el socio de manera exitosa", HttpStatus.OK);
+            UserDto userDto = userDao.findById(request.getUserId());
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+        }
+            userDto.setRole("partner");
+            PartnerDto partnerDto = new PartnerDto();
+            partnerDto.setUserId(userDto);
+            partnerDto.setMoney(50000);
+            partnerDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
+            partnerDto.setType("regular");
+
+            System.out.println("se ha creado el usuario exitosamente ");
+            System.out.println("Tipo de socio: " + partnerDto.getType());
+            System.out.println("Sus ingresos actuales son de:" + partnerDto.getMoney());
+            System.out.println("Se creo el socio en el dia y hora: " + partnerDto.getDateCreated());
+            this.servic.changeRol(partnerDto);
+            return ResponseEntity.ok("El usuario ha sido convertido en socio exitosamente.");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
-    public void guestInvoice() throws Exception {
-    this.servic.guestInvoice();
+    @PostMapping("/guest-invoice")
+    public ResponseEntity<?> guestInvoice(@RequestBody InvoiceRequest request) throws Exception {
+        try {
+            servic.guestInvoice(request);
+             return ResponseEntity.ok("Factura creada exitosamente.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        }
+        
     }
-    
-}
+
+

@@ -5,23 +5,15 @@
 package app.controllers.requests;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Controller;
 
 /**
  *
  * @author Camilo
- */
+ */@Controller
 @Getter
 @Setter
-@NoArgsConstructor
-public class CreateUserRequest {
-    public String name;
-    public String celPhone;
-    public String userName;
-    public String document;
-    public String password;
-    public Long partnerId;
+public class ChangeRol {
     public Long userId;
-
 }

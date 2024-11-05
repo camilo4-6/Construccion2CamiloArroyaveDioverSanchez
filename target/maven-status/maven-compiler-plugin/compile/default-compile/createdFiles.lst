@@ -1,3 +1,4 @@
+app\controllers\requests\ChangeRol.class
 app\controllers\requests\InvoiceItem.class
 app\Daoo\PersonDaoImplementation.class
 app\dao\repositores\PersonRepository.class

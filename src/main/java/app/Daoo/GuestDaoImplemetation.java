@@ -134,7 +134,13 @@ public class GuestDaoImplemetation implements GuestDao {
     preparedStatement.close();
     return count;
     }
+    @Override
+    public GuestDto findById(long guestId) throws Exception {
+        Guest guest = guestRepository.findById(guestId)
+                .orElseThrow(() -> new Exception("Socio no encontrado."));
 
+        return Helper.parse(guest);
+    }
    
 
     }

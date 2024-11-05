@@ -15,6 +15,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ParnerInvoice {
-    public Long partnerId;
+     public Long partnerId;
      public Long personId;
 }

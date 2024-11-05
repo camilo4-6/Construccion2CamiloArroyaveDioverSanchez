@@ -172,10 +172,16 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
     public void changeRol(PartnerDto partnerDto) throws Exception {
 
         UserDto userDto = userDao.findByUserName(partnerDto.getUserId());
-        GuestDto guestDto = this.guestDao.existByGuest(userDto);
-        if (guestDto != null) {
-            this.guestDao.deleteGuest(guestDto);
-        }
+         if (userDto == null) {
+        throw new Exception("Usuario no encontrado.");
+    }
+        GuestDto guestDto = guestDao.existByGuest(userDto);
+    if (guestDto != null) {
+        // Si el usuario es un invitado, eliminamos su registro
+        guestDao.deleteGuest(guestDto);
+        System.out.println("Se eliminó el invitado con éxito.");
+    }
+
 
         userDto.setRole("partner");
         this.userDao.updateUserRole(userDto);
@@ -319,8 +325,8 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
 
     @Override
     public void payInvoice(PayInvoice request) throws Exception {
-        
-         long partnerId = request.getPartnerId();
+
+        long partnerId = request.getPartnerId();
         PartnerDto partnerDto = partnerDao.findById(partnerId);
         long invoiceId = request.getInvoiceId();
         InvoiceDto invoiceDto = invoiceDao.existsByIDInvoice(invoiceId);
@@ -338,25 +344,24 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         if ("Pagada".equals(invoiceDto.getStatus())) {
             throw new Exception("La factura ya ha sido pagada.");
         }
-         
+
     }
 
     @Override
-    public  List<InvoiceDto> showInvoiceForPartner(ParnerInvoice request) throws Exception {
+    public List<InvoiceDto> showInvoiceForPartner(ParnerInvoice request) throws Exception {
         long partnerId = request.getPartnerId();
         PartnerDto partnerDto = partnerDao.findById(partnerId);
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(partnerDto.getId());
         List<InvoiceDto> invoices = invoiceDao.statusInvoice(invoiceDto);
 
-        
         if (invoices.isEmpty()) {
             System.out.println("No hay facturas disponibles para este socio.");
         }
         for (InvoiceDto invoice : invoices) {
             System.out.println("ID: " + invoice.getId() + "\n Status: " + invoice.getStatus() + "\n Valor: " + invoice.getAmount());
         }
-         return invoices;
+        return invoices;
     }
 
     @Override
@@ -373,39 +378,32 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
     }
 
     @Override
-    public void guestInvoice() throws Exception {
-
-        UserDto userDto = ServiceClub.user;
-        System.out.println("ingrese la cantidad de items");
-        int items = invoiceValidator.validItem(Utils.getReader().nextLine());
-
+    public void guestInvoice(InvoiceRequest request) throws Exception {
+        long partnerId = request.getPartnerId();
+        PartnerDto partnerDto = partnerDao.findById(partnerId);
+        long personId = request.getPersonId();
+        PersonDto personDto = personDao.findById(personId);
         InvoiceDto invoiceDto = new InvoiceDto();
-
-        GuestDto guestDto = guestDao.existByGuest(userDto);
-        PersonDto personDto = personDao.findByDocument(userDto.getPersonId());
+        long guestId = request.getGuestId();
+        GuestDto guestDto = guestDao.findById(guestId);
         invoiceDto.setPersonId(personDto);
         invoiceDto.setPartnerId(guestDto.getPartnerId());
         invoiceDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
         invoiceDto.setStatus("Sin pagar");
         List<InvoiceDetailDto> invoices = new ArrayList<InvoiceDetailDto>();
-        double total = 0;
-
-        for (int i = 0; i < items; i++) {
+         double total = 0;
+        List<InvoiceDetailDto> invoiceDetails = new ArrayList<>();
+        for (InvoiceItem item : request.getItems()) {
             InvoiceDetailDto invoiceDetailDto = new InvoiceDetailDto();
-
-            invoiceDetailDto.setItem(i + 1);
-            invoiceDetailDto.setDescription("Descripcion" + (i + 1));
-            System.out.println("Ingrese el precio del ítem " + (i + 1));
-            invoiceDetailDto.setAmount(invoiceValidator.validAmount(Utils.getReader().nextLine()));
-            total += invoiceDetailDto.getAmount();
-            invoices.add(invoiceDetailDto);
-
+            invoiceDetailDto.setDescription(item.getDescription());
+            invoiceDetailDto.setAmount(item.getAmount());
+            total += item.getAmount();
+            invoiceDetails.add(invoiceDetailDto);
         }
-
         invoiceDto.setAmount(total);
         Invoice invoice = Helper.parse(invoiceDto);
         invoiceDao.createInvoice(invoice);
-        for (InvoiceDetailDto detail : invoices) {
+        for (InvoiceDetailDto detail : invoiceDetails) {
             detail.setInvoiceId(invoiceDto);
             InvoiceDetail invoiceDetail = Helper.parse(detail);
             invoiceDetail.setInvoiceId(invoice);

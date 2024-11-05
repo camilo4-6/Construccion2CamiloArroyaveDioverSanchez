@@ -45,6 +45,6 @@ public interface PartnerService {
     
     public void showInvoiceForAdmin() throws Exception;
     
-    public void guestInvoice()throws Exception;
+    public void guestInvoice(InvoiceRequest request)throws Exception;
     
 }

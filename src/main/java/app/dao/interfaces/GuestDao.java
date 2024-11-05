@@ -31,5 +31,6 @@ public interface GuestDao {
 
     public int countGuestsByPartnerId(long partnerId) throws Exception;
     
+    public GuestDto findById(long guestId) throws Exception;
     
 }

@@ -140,7 +140,7 @@ public class PartnerController implements ControllerInterface {
         }
     }
 
-    @PostMapping("/partner2")
+    @PostMapping("status-guest")
     public ResponseEntity<?> statusGuest(@RequestBody CreateUserRequest request) throws Exception {
         try {
 

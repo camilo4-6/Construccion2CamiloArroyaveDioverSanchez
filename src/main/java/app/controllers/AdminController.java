@@ -99,7 +99,7 @@ public class AdminController implements ControllerInterface {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-   @GetMapping("/facturas")
+   @GetMapping("/invoice")
     public ResponseEntity<List<InvoiceDto>> showInvoiceForAdmin() throws Exception {
     List<InvoiceDto> invoices = invoiceDao.findAllInvoices();
     if (invoices.isEmpty()) {
