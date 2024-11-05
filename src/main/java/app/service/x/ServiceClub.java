@@ -390,7 +390,6 @@ public class ServiceClub implements AdminService, LoginService, PartnerService {
         invoiceDto.setPartnerId(guestDto.getPartnerId());
         invoiceDto.setDateCreated(new Timestamp(System.currentTimeMillis()));
         invoiceDto.setStatus("Sin pagar");
-        List<InvoiceDetailDto> invoices = new ArrayList<InvoiceDetailDto>();
          double total = 0;
         List<InvoiceDetailDto> invoiceDetails = new ArrayList<>();
         for (InvoiceItem item : request.getItems()) {

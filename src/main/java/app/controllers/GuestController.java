@@ -53,7 +53,7 @@ public class GuestController implements ControllerInterface {
     public void session() throws Exception {
     }
 
-    @PostMapping("/create- partner")
+    @PostMapping("/changerol")
     public ResponseEntity <?> createPartner(@RequestBody ChangeRol request) throws Exception {
         try {
 
